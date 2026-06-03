@@ -242,25 +242,68 @@
                 </div>
             </div>
 
+            <!-- Simulation Mode Settings Card -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl max-w-lg mx-auto w-full shadow-sm">
+                <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5 shrink-0">
+                    <i class="fa-solid fa-sliders text-indigo-500"></i> Modo de Simulación:
+                </span>
+                <div class="flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-950 p-1 rounded-xl border border-slate-200/50 dark:border-slate-800/50 w-full justify-between sm:justify-start">
+                    <button id="mode-study-btn" onclick="setSimulationMode('practice')" class="flex-1 text-center py-2 px-4 rounded-lg text-xs font-bold transition-all duration-200">
+                        <i class="fa-solid fa-graduation-cap mr-1"></i> Estudio
+                    </button>
+                    <button id="mode-exam-btn" onclick="setSimulationMode('exam')" class="flex-1 text-center py-2 px-4 rounded-lg text-xs font-bold transition-all duration-200">
+                        <i class="fa-solid fa-clock-rotate-left mr-1"></i> Examen Real
+                    </button>
+                </div>
+            </div>
+
             <!-- Historical performance logs from localStorage -->
-            <div id="stats-banner" class="hidden bg-slate-100/50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="flex items-center space-x-4">
-                    <div class="text-amber-500 text-2xl px-2">
-                        <i class="fa-solid fa-award"></i>
+            <div id="stats-banner" class="hidden grid grid-cols-1 md:grid-cols-12 gap-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-xl w-full">
+                <!-- Col 1: General Stats (5 cols) -->
+                <div class="md:col-span-5 flex flex-col justify-between border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800 pb-4 md:pb-0 md:pr-6 gap-4">
+                    <div class="flex items-center space-x-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200">Progreso Reciente</h4>
+                            <p class="text-[10px] text-slate-400 block mt-0.5">Últimos exámenes guardados en caché</p>
+                        </div>
                     </div>
-                    <div>
-                        <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200">Último Desempeño Registrado</h4>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Completado el <span id="last-exam-date">03/06/2026</span></p>
+                    
+                    <div class="grid grid-cols-3 gap-3 text-center my-2">
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/50 dark:border-slate-800/50">
+                            <span id="stats-total-tests" class="text-base md:text-lg font-black text-indigo-500">0</span>
+                            <span class="block text-[8px] text-slate-400 uppercase font-bold tracking-wider mt-0.5">Ensayos</span>
+                        </div>
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/50 dark:border-slate-800/50">
+                            <span id="stats-avg-score" class="text-base md:text-lg font-black text-emerald-500">0%</span>
+                            <span class="block text-[8px] text-slate-400 uppercase font-bold tracking-wider mt-0.5">Promedio</span>
+                        </div>
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/50 dark:border-slate-800/50">
+                            <span id="stats-high-score" class="text-base md:text-lg font-black text-violet-500">0%</span>
+                            <span class="block text-[8px] text-slate-400 uppercase font-bold tracking-wider mt-0.5">Máximo</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-950 pt-3">
+                        <span>Último: <strong id="last-exam-score-text" class="text-slate-800 dark:text-slate-200">0%</strong></span>
+                        <span id="last-exam-date-text">--/--/----</span>
                     </div>
                 </div>
-                <div class="flex items-center space-x-6 text-center">
-                    <div class="px-3 border-r border-slate-200 dark:border-slate-800">
-                        <span id="last-exam-score" class="text-xl font-extrabold text-indigo-500">84%</span>
-                        <span class="block text-[10px] text-slate-400 uppercase tracking-wide">Aciertos</span>
+
+                <!-- Col 2: Line SVG Chart (7 cols) -->
+                <div class="md:col-span-7 flex flex-col justify-between gap-3 h-full">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Curva de Aprendizaje</span>
+                        <button onclick="clearHistory()" class="text-[9px] font-bold text-red-500 hover:text-red-400 transition-colors uppercase tracking-wider"><i class="fa-solid fa-trash mr-1"></i> Borrar Historial</button>
                     </div>
-                    <div class="px-3">
-                        <span id="last-exam-type" class="text-sm font-bold text-slate-700 dark:text-slate-300">Diagnóstico</span>
-                        <span class="block text-[10px] text-slate-400 uppercase tracking-wide">Modo</span>
+                    
+                    <!-- Dynamic SVG Line Chart -->
+                    <div class="w-full flex-1 flex items-center justify-center bg-slate-50 dark:bg-slate-950/60 rounded-2xl border border-slate-200/50 dark:border-slate-800/50 p-2 min-h-[120px]">
+                        <svg id="progress-svg-chart" viewBox="0 0 500 130" class="w-full h-full text-indigo-500 select-none">
+                            <!-- Grid and Path injected by JS -->
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -705,6 +748,9 @@
         // Reading passage visual settings
         let readingFontSize = 16; // px
 
+        // Simulation Mode (practice | exam)
+        let simulationMode = localStorage.getItem('simulation_mode') || 'practice';
+
         // ==================== GENERATORS AND LOCAL BANK (+500 VARIABILITY) ====================
         
         // Pythagorean triples helper for dynamic values
@@ -955,6 +1001,97 @@
                         correcta_index: 0,
                         explicacion: `Calculamos primero el área total del rectángulo: A_rec = ${w} · ${h} = ${totalArea} cm². <br> El área del cuadrado sustraído es A_sq = ${s} · ${s} = ${squareArea} cm². <br> El área final es la diferencia: ${totalArea} - ${squareArea} = ${finalArea} cm².`
                     };
+                },
+                // 11. Mediana de datos desordenados
+                () => {
+                    let list = [];
+                    for(let i=0; i<5; i++) {
+                        list.push(Math.floor(Math.random() * 25) + 10);
+                    }
+                    list = [...new Set(list)];
+                    while(list.length < 5) {
+                        list.push(Math.floor(Math.random() * 25) + 10);
+                        list = [...new Set(list)];
+                    }
+                    let sorted = [...list].sort((a,b) => a-b);
+                    let median = sorted[2];
+                    
+                    let avg = Math.round(list.reduce((a,b)=>a+b, 0) / 5);
+                    let wrongMedian = list[2];
+                    if (wrongMedian === median) {
+                        wrongMedian = sorted[1];
+                    }
+                    
+                    return {
+                        subtopic: "Mediana y Promedio",
+                        pregunta: `Un docente registra las calificaciones de 5 alumnos en una evaluación diagnóstica: <span class="font-mono bg-slate-100 dark:bg-slate-900 px-2 py-0.5 rounded">${list.join(", ")}</span>. ¿Cuál es la mediana exacta de este conjunto de calificaciones?`,
+                        opciones: [
+                            `${median}`,
+                            `${avg}`,
+                            `${wrongMedian}`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Para obtener la mediana de un conjunto de datos impares, primero se deben ordenar de menor a mayor: <span class="font-mono">${sorted.join(", ")}</span>. El valor central (en la posición 3) es la mediana, es decir, ${median}.`
+                    };
+                },
+                // 12. Probabilidad Clásica (Urna de esferas de colores)
+                () => {
+                    let red = Math.floor(Math.random() * 5) + 3;
+                    let blue = Math.floor(Math.random() * 4) + 2;
+                    let green = Math.floor(Math.random() * 4) + 2;
+                    let total = red + blue + green;
+                    
+                    function gcd(x, y) {
+                        return y === 0 ? x : gcd(y, x % y);
+                    }
+                    let divisor = gcd(red, total);
+                    let num = red / divisor;
+                    let den = total / divisor;
+                    
+                    let fraction = `${num}/${den}`;
+                    let favorDesfavor = `${red}/${blue + green}`;
+                    let inverse = `${total}/${red}`;
+                    
+                    return {
+                        subtopic: "Probabilidad Clásica",
+                        pregunta: `En una urna se colocan ${red} esferas rojas, ${blue} esferas azules y ${green} esferas verdes de iguales dimensiones. Si se extrae una esfera completamente al azar, ¿cuál es la probabilidad de que esta sea de color rojo?`,
+                        opciones: [
+                            `${fraction}`,
+                            `${favorDesfavor}`,
+                            `${inverse}`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `La fórmula de probabilidad clásica es P(A) = Casos favorables / Casos totales. <br> Casos favorables (rojas) = ${red}. <br> Casos totales = ${red} + ${blue} + ${green} = ${total}. <br> Probabilidad = ${red}/${total}, que al simplificarse por su máximo común divisor es ${fraction}.`
+                    };
+                },
+                // 13. Intersección de Parábola con Eje X (Ecuación Cuadrática)
+                () => {
+                    let r1 = -(Math.floor(Math.random() * 6) + 3); // [-8, -3]
+                    let r2 = -(Math.floor(Math.random() * 5) + 2); // [-6, -2]
+                    while (r1 === r2) {
+                        r2 = -(Math.floor(Math.random() * 5) + 2);
+                    }
+                    let b = -(r1 + r2);
+                    let c = r1 * r2;
+                    
+                    let bSign = b < 0 ? `- ${Math.abs(b)}` : `+ ${b}`;
+                    let cSign = c < 0 ? `- ${Math.abs(c)}` : `+ ${c}`;
+                    
+                    let correctVal = r1;
+                    let wrong1 = -r1;
+                    let wrong2 = c;
+                    
+                    return {
+                        subtopic: "Funciones Cuadráticas",
+                        pregunta: `¿Cuál valor corresponde a uno de los puntos en los que la parábola <span class="font-mono bg-slate-100 dark:bg-slate-900 px-2 py-0.5 rounded">y = x² ${bSign}x ${cSign}</span> interseca al eje x?`,
+                        opciones: [
+                            `x = ${correctVal}`,
+                            `x = ${wrong1}`,
+                            `x = ${wrong2}`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Para encontrar la intersección con el eje x, igualamos y a 0: x² ${bSign}x ${cSign} = 0. <br> Factorizando el trinomio buscamos dos números que multiplicados den ${c} y sumados den ${b}. Estos números son ${-r1} y ${-r2}: (x + ${-r1})(x + ${-r2}) = 0. <br> Despejando las raíces obtenemos x = ${r1} y x = ${r2}. Por lo tanto, el valor correcto es x = ${correctVal}.`
+                    };
                 }
             ],
             'Pensamiento Científico': [
@@ -1085,6 +1222,93 @@
                         correcta_index: 0,
                         explicacion: `La anafase es la fase de la mitosis donde los microtúbulos tiran de las cromátidas hermanas, dividiéndolas y moviéndolas hacia extremos celulares contrarios.`
                     };
+                },
+                // 9. Metabolismo Celular
+                () => {
+                    const processes = [
+                        { name: "degradación de glucosa durante la respiración celular (glucólisis)", type: "Catabolismo", desc: "un proceso catabólico porque descompone moléculas complejas (glucosa) en compuestos más simples para liberar energía útil." },
+                        { name: "síntesis de proteínas a partir de aminoácidos en los ribosomas", type: "Anabolismo", desc: "un proceso anabólico porque consume energía metabólica para construir macromoléculas complejas a partir de monómeros simples." },
+                        { name: "fotosíntesis en los cloroplastos de las células vegetales", type: "Anabolismo", desc: "un proceso anabólico porque consume energía lumínica para sintetizar glucosa a partir de dióxido de carbono y agua." }
+                    ];
+                    let p = processes[Math.floor(Math.random() * processes.length)];
+                    let correct = p.type;
+                    let wrong = correct === "Anabolismo" ? "Catabolismo" : "Anabolismo";
+                    
+                    return {
+                        subtopic: "Metabolismo Celular",
+                        pregunta: `El proceso biológico de la célula identificado como la <strong>${p.name}</strong> se clasifica fundamentalmente bajo qué tipo de vía metabólica celular?`,
+                        opciones: [
+                            `${correct}`,
+                            `${wrong}`,
+                            `Fermentación celular`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `La reacción descrita constituye ${p.desc}`
+                    };
+                },
+                // 10. Estados de la Materia
+                () => {
+                    const states = [
+                        { state: "sólido", correct: "Sus moléculas presentan una elevada fuerza de atracción mutua, manteniendo volumen y forma fijos.", wrong1: "Sus moléculas tienen fuerzas de cohesión intermedias, adaptándose al recipiente pero manteniendo un volumen definido.", wrong2: "Sus moléculas carecen de fuerzas de atracción y se expanden llenando todo el espacio disponible." },
+                        { state: "líquido", correct: "Sus moléculas tienen fuerzas de cohesión intermedias, permitiéndoles fluir y adaptarse al envase con volumen definido.", wrong1: "Sus moléculas están unidas rígidamente con fuerzas de atracción elevadas que bloquean todo flujo.", wrong2: "Sus moléculas carecen casi por completo de atracción mutua y ocupan todo el espacio libre." },
+                        { state: "gaseoso", correct: "Sus moléculas carecen casi de fuerzas de atracción mutua, expandiéndose con facilidad y llenando cualquier contenedor.", wrong1: "Sus moléculas están sólidamente entrelazadas con volumen y forma rígidos e indeformables.", wrong2: "Sus moléculas mantienen volumen constante pero se adaptan libremente a la forma del envase." }
+                    ];
+                    let s = states[Math.floor(Math.random() * states.length)];
+                    
+                    return {
+                        subtopic: "Estados de Agregación",
+                        pregunta: `¿Cuál de las siguientes afirmaciones describe de manera precisa el comportamiento de las fuerzas moleculares en el estado de agregación <strong>${s.state}</strong>?`,
+                        opciones: [
+                            `${s.correct}`,
+                            `${s.wrong1}`,
+                            `${s.wrong2}`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `En el estado ${s.state}, las características estructurales moleculares determinan que ${s.correct.toLowerCase()}`
+                    };
+                },
+                // 11. Actividad Humana e Impacto Ecológico
+                () => {
+                    const impacts = [
+                        { cause: "La quema excesiva de carbón y combustibles fósiles en industrias de gran escala", effect: "Lluvia ácida debido al exceso de óxidos de azufre y nitrógeno en la atmósfera.", wrong1: "Eutrofización acelerada por acumulación excesiva de fósforo y nitrógeno en mantos de agua.", wrong2: "Agotamiento súbito del ozono en la atmósfera baja por clorofluorocarbonos." },
+                        { cause: "El arrastre y escurrimiento de fertilizantes y plaguicidas agrícolas hacia lagos y ríos", effect: "Eutrofización y proliferación desmedida de algas que asfixia la biodiversidad acuática.", wrong1: "Lluvia ácida debido a la precipitación de compuestos químicos sulfurados.", wrong2: "Destrucción térmica de la estratosfera por óxido nitroso." }
+                    ];
+                    let imp = impacts[Math.floor(Math.random() * impacts.length)];
+                    
+                    return {
+                        subtopic: "Ciencia y Medio Ambiente",
+                        pregunta: `¿Cuál representa el impacto ecológico directo y comprobado de la siguiente actividad antropogénica: <em>${imp.cause}</em>?`,
+                        opciones: [
+                            `${imp.effect}`,
+                            `${imp.wrong1}`,
+                            `${imp.wrong2}`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `${imp.cause} genera como consecuencia directa la ${imp.effect.toLowerCase()}`
+                    };
+                },
+                // 12. Concepto de Velocidad y Aceleración
+                () => {
+                    const cases = [
+                        { text: "Una persona camina cierta distancia a su casa en un determinado tiempo.", correct: "Velocidad", desc: "La velocidad es una magnitud que relaciona el cambio de posición (o distancia de trayectoria recorrida) con el tiempo empleado en recorrerla." },
+                        { text: "Un automóvil está en reposo y avanza con el cambio de color del semáforo.", correct: "Aceleración", desc: "Al iniciar la marcha desde el reposo, el automóvil experimenta un cambio en la velocidad a lo largo del tiempo, lo cual corresponde a la aceleración física." },
+                        { text: "Un ciclista varía el ritmo de su pedaleo al subir la pendiente de una montaña.", correct: "Aceleración", desc: "Al variar el ritmo de pedaleo en la pendiente, la velocidad del ciclista cambia (aumenta o disminuye), lo que implica una aceleración física." }
+                    ];
+                    let c = cases[Math.floor(Math.random() * cases.length)];
+                    let correctAns = c.correct;
+                    let wrongAns = correctAns === "Velocidad" ? "Aceleración" : "Velocidad";
+                    
+                    return {
+                        subtopic: "Velocidad y Aceleración",
+                        pregunta: `Identifique cuál magnitud física se ejemplifica en la siguiente situación: <em>«${c.text}»</em>`,
+                        opciones: [
+                            `${correctAns}`,
+                            `${wrongAns}`,
+                            `Fuerza neta`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `La situación física describe un comportamiento donde ${c.desc.toLowerCase()}`
+                    };
                 }
             ],
             'Redacción Indirecta': [
@@ -1170,6 +1394,110 @@
                         ],
                         correcta_index: 0,
                         explicacion: `Las frases 'con su propia boca' y 'subiendo para arriba' son redundantes ya que el acto de declarar implica usar la boca y subir implica moverse hacia arriba. La primera opción expresa la idea de forma clara y directa.`
+                    };
+                },
+                // 7. Registro Académico vs. Coloquial
+                () => {
+                    const options = [
+                        { colloquial: "Le echamos un montón de ganas al experimento, pero al final los datos salieron medio raros.", formal1: "La metodología empleada se detalla con precisión en la sección metodológica del reporte.", formal2: "Los resultados experimentales sugieren una correlación directa entre las dos variables analizadas." },
+                        { colloquial: "El doctor nos platicó que la vacuna jala muy bien si te la pones en la mañana temprano.", formal1: "El equipo de infectología determinó que la vacuna presenta alta eficacia clínica al ser administrada en ayuno.", formal2: "Los estudios clínicos demuestran que la respuesta inmunitaria de los pacientes mejora sensiblemente." }
+                    ];
+                    let opt = options[Math.floor(Math.random() * options.length)];
+                    
+                    return {
+                        subtopic: "Registro Lingüístico",
+                        pregunta: `Identifica cuál de los siguientes enunciados resulta **inadecuado** para un informe de investigación científica formal debido al uso de un registro coloquial:`,
+                        opciones: [
+                            `«${opt.colloquial}»`,
+                            `«${opt.formal1}»`,
+                            `«${opt.formal2}»`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `El enunciado coloquial utiliza frases informales e imprecisas (como 'un montón de ganas', 'medio raros', 'platicó', 'jala muy bien') que no se corresponden con el tono objetivo, preciso y formal de la redacción académica.`
+                    };
+                },
+                // 8. Grafías Dudosas
+                () => {
+                    const cases = [
+                        { correct: "La perseverancia es indispensable para culminar con éxito el proyecto.", wrong1: "La perseveransia es indispensable para culminar con éxito el proyecto.", wrong2: "La perseverancia es indizpensable para culminar con écsito el proyecto." },
+                        { correct: "La decisión del jurado fue celebrada por todos los investigadores.", wrong1: "La desición del jurado fue celebrada por todos los investigadores.", wrong2: "La decición del jurado fue celebrada por todos los investigadores." },
+                        { correct: "Una gran explosión sacudió la periferia de la zona industrial.", wrong1: "Una gran exploción sacudió la periferia de la zona industrial.", wrong2: "Una gran explocion sacudió la periferia de la zona indutrial." }
+                    ];
+                    let c = cases[Math.floor(Math.random() * cases.length)];
+                    
+                    return {
+                        subtopic: "Ortografía de Grafías",
+                        pregunta: `Elija la opción cuyo enunciado presenta una ortografía **correcta** en el uso de las letras o grafías dudosas:`,
+                        opciones: [
+                            `${c.correct}`,
+                            `${c.wrong1}`,
+                            `${c.wrong2}`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `El enunciado correcto respeta las normas ortográficas del español. En las otras opciones hay fallas como escribir 'perseveransia' (debe ser con c), 'desición'/'decición' (debe ser decisión) o 'exploción' (debe ser explosión).`
+                    };
+                },
+                // 9. Homófonos Contextuales
+                () => {
+                    const pairs = [
+                        { scenario: "El ebanista utilizó una garlopa especial para __________ la superficie áspera de la viga de madera.", correct: "desbastar", wrong1: "devastar", wrong2: "debastar", desc: "'desbastar' significa eliminar las asperezas o partes bastas de un material (como la madera), mientras que 'devastar' significa asolar o destruir por completo." },
+                        { scenario: "El huracán categoría 5 amenaza con __________ por completo las plantaciones costeras de plátano.", correct: "devastar", wrong1: "desbastar", wrong2: "devastar (con b: debastar)", desc: "'devastar' denota asolamiento o destrucción total de una región, mientras que 'desbastar' se refiere a pulir o rebajar materiales." },
+                        { scenario: "El general decidió __________ a los soldados para que se negaran a acatar la orden del dictador.", correct: "rebelar", wrong1: "revelar", wrong2: "revelar (con v)", desc: "'rebelar' significa oponer resistencia o sublevarse (proveniente de rebelde), mientras que 'revelar' significa descubrir lo oculto o manifestar un secreto." }
+                    ];
+                    let p = pairs[Math.floor(Math.random() * pairs.length)];
+                    
+                    return {
+                        subtopic: "Homófonos Contextuales",
+                        pregunta: `Complete el enunciado con la palabra que responde a la precisión léxica y ortografía del contexto: <br> «${p.scenario}»`,
+                        opciones: [
+                            `${p.correct}`,
+                            `${p.wrong1}`,
+                            `${p.wrong2}`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `De acuerdo al contexto de la oración, la opción correcta es '${p.correct}'. ${p.desc}`
+                    };
+                },
+                // 10. Monografía e Impersonalidad
+                () => {
+                    return {
+                        subtopic: "Géneros Textuales",
+                        pregunta: `Un estudiante debe entregar una **monografía académica** para obtener parte de su evaluación. ¿Cuál de los siguientes fragmentos de texto es el adecuado para esta situación comunicativa debido a su tono objetivo e impersonal?`,
+                        opciones: [
+                            `«La viruela es una enfermedad infecciosa grave que se caracteriza por ser altamente contagiosa y por tener una tasa de mortalidad elevada. Entre sus síntomas más característicos están las erupciones cutáneas en forma de pústulas. En 1980 se declaró oficialmente erradicada del planeta.»`,
+                            `«Louis Armstrong fue un músico genial que revolucionó para siempre la historia del jazz. Para mi gusto personal, sus mejores grabaciones fueron las de los años cincuenta, donde su carisma y trompeta alcanzaron el máximo nivel.»`,
+                            `«Las suricatas son unos animalitos adorables que viven en el desierto del Kalahari. Son muy graciosas y les encanta comer insectos. Si viste El rey león de Disney, seguro recuerdas a Timón, que es una tierna suricata.»`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Una monografía académica exige un tono objetivo, riguroso e impersonal. El primer texto cumple con esto al exponer datos científicos y clínicos de forma neutral, mientras que los otros incluyen juicios de valor subjetivos o lenguaje familiar.`
+                    };
+                },
+                // 11. Antónimos Contextuales
+                () => {
+                    return {
+                        subtopic: "Cohesión Léxico-Semántica",
+                        pregunta: `Elige la opción que, de acuerdo con el contexto de la oración, presenta el significado **contrario** (antónimo) a la palabra resaltada en negritas: <br> «Un estudio psicológico determinó que el estrés representa uno de los problemas de mayor **seriedad** entre los adolescentes.»`,
+                        opciones: [
+                            `Insignificancia`,
+                            `Informalidad`,
+                            `Irresponsabilidad`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `En la oración, 'seriedad' se refiere a la gravedad, importancia o trascendencia del problema. Por lo tanto, el antónimo adecuado al contexto es 'insignificancia' (falta de importancia), ya que 'informalidad' o 'irresponsabilidad' no se aplican al peso o gravedad de un padecimiento.`
+                    };
+                },
+                // 12. Diéresis en Secuencias
+                () => {
+                    return {
+                        subtopic: "Uso de Grafías",
+                        pregunta: `Completa el siguiente enunciado con las grafías correctas: <br> «En la antig___edad se pensaba que no ir a la g___erra era una verg___enza.»`,
+                        opciones: [
+                            `ü - u - ü`,
+                            `ü - u - u`,
+                            `u - ü - ü`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `De acuerdo a la Ortografía de la lengua española, la diéresis (¨) se coloca sobre la 'u' para indicar su sonoridad en las sílabas 'güe' y 'güi', como en 'antigüedad' y 'vergüenza'. En la palabra 'guerra', la 'u' es muda y no lleva diéresis.`
                     };
                 }
             ],
@@ -1454,6 +1782,8 @@
         // ==================== APP CONTROL LOGIC ====================
 
         window.onload = function() {
+            simulationMode = localStorage.getItem('simulation_mode') || 'practice';
+            updateSimulationModeToggles();
             loadStatsBanner();
             initScratchpad();
             loadGeminiConfig();
@@ -1463,17 +1793,200 @@
             document.documentElement.classList.toggle('dark');
         }
 
-        function loadStatsBanner() {
-            let lastScore = localStorage.getItem('last_exam_score');
-            let lastType = localStorage.getItem('last_exam_type');
-            let lastDate = localStorage.getItem('last_exam_date');
+        function setSimulationMode(mode) {
+            simulationMode = mode;
+            localStorage.setItem('simulation_mode', mode);
+            updateSimulationModeToggles();
+        }
 
-            if (lastScore !== null) {
-                document.getElementById('stats-banner').classList.remove('hidden');
-                document.getElementById('last-exam-score').innerText = `${lastScore}%`;
-                document.getElementById('last-exam-type').innerText = lastType === 'diagnostic' ? 'Diagnóstico' : lastType === 'full' ? 'Completo CENEVAL' : 'Remedial';
-                document.getElementById('last-exam-date').innerText = lastDate;
+        function updateSimulationModeToggles() {
+            const studyBtn = document.getElementById('mode-study-btn');
+            const examBtn = document.getElementById('mode-exam-btn');
+            if (!studyBtn || !examBtn) return;
+
+            if (simulationMode === 'practice') {
+                studyBtn.className = "flex-1 text-center py-2 px-4 rounded-lg text-xs font-bold transition-all duration-200 bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800/80 text-indigo-600 dark:text-indigo-400";
+                examBtn.className = "flex-1 text-center py-2 px-4 rounded-lg text-xs font-bold transition-all duration-200 text-slate-500 hover:bg-white/50 dark:hover:bg-slate-900/50";
+            } else {
+                examBtn.className = "flex-1 text-center py-2 px-4 rounded-lg text-xs font-bold transition-all duration-200 bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800/80 text-indigo-600 dark:text-indigo-400";
+                studyBtn.className = "flex-1 text-center py-2 px-4 rounded-lg text-xs font-bold transition-all duration-200 text-slate-500 hover:bg-white/50 dark:hover:bg-slate-900/50";
             }
+        }
+
+        function clearHistory() {
+            let confirmed = confirm("¿Estás seguro de que deseas borrar todo el historial de progreso? Esta acción no se puede deshacer.");
+            if (confirmed) {
+                localStorage.removeItem('exam_history');
+                localStorage.removeItem('last_exam_score');
+                localStorage.removeItem('last_exam_type');
+                localStorage.removeItem('last_exam_date');
+                loadStatsBanner();
+            }
+        }
+
+        function loadStatsBanner() {
+            let history = [];
+            try {
+                history = JSON.parse(localStorage.getItem('exam_history')) || [];
+            } catch (e) {
+                history = [];
+            }
+
+            if (history.length === 0) {
+                let lastScore = localStorage.getItem('last_exam_score');
+                let lastType = localStorage.getItem('last_exam_type');
+                let lastDate = localStorage.getItem('last_exam_date');
+                if (lastScore !== null) {
+                    history.push({
+                        score: parseInt(lastScore),
+                        type: lastType,
+                        date: lastDate
+                    });
+                    localStorage.setItem('exam_history', JSON.stringify(history));
+                }
+            }
+
+            if (history.length > 0) {
+                document.getElementById('stats-banner').classList.remove('hidden');
+                
+                let totalTests = history.length;
+                let scores = history.map(h => h.score);
+                let avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / totalTests);
+                let highScore = Math.max(...scores);
+                
+                document.getElementById('stats-total-tests').innerText = totalTests;
+                document.getElementById('stats-avg-score').innerText = `${avgScore}%`;
+                document.getElementById('stats-high-score').innerText = `${highScore}%`;
+                
+                let lastItem = history[history.length - 1];
+                document.getElementById('last-exam-score-text').innerText = `${lastItem.score}%`;
+                document.getElementById('last-exam-date-text').innerText = `Completado el ${lastItem.date}`;
+
+                renderSVGProgressChart(history);
+            } else {
+                document.getElementById('stats-banner').classList.add('hidden');
+            }
+        }
+
+        function renderSVGProgressChart(history) {
+            const svg = document.getElementById('progress-svg-chart');
+            if (!svg) return;
+            svg.innerHTML = ''; 
+
+            let data = history.slice(-10); 
+            let totalPoints = data.length;
+            
+            let width = 500;
+            let height = 130;
+            let paddingX = 40;
+            let paddingY = 20;
+
+            let gridLevels = [0, 50, 100];
+            gridLevels.forEach(level => {
+                let y = paddingY + (100 - level) / 100 * (height - 2 * paddingY);
+                let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', paddingX);
+                line.setAttribute('y1', y);
+                line.setAttribute('x2', width - paddingX);
+                line.setAttribute('y2', y);
+                line.setAttribute('stroke', '#e2e8f0');
+                line.setAttribute('stroke-dasharray', '4,4');
+                line.setAttribute('class', 'dark:stroke-slate-800');
+                svg.appendChild(line);
+
+                let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', paddingX - 10);
+                text.setAttribute('y', y + 4);
+                text.setAttribute('font-size', '9');
+                text.setAttribute('font-family', 'sans-serif');
+                text.setAttribute('text-anchor', 'end');
+                text.setAttribute('class', 'fill-slate-400 dark:fill-slate-500 font-semibold');
+                text.textContent = `${level}%`;
+                svg.appendChild(text);
+            });
+
+            let points = [];
+            for (let i = 0; i < totalPoints; i++) {
+                let x = paddingX + (i / Math.max(1, totalPoints - 1)) * (width - 2 * paddingX);
+                let y = paddingY + (100 - data[i].score) / 100 * (height - 2 * paddingY);
+                points.push({ x, y, score: data[i].score, date: data[i].date });
+            }
+
+            if (totalPoints > 1) {
+                let pathD = `M ${points[0].x} ${points[0].y} `;
+                for (let i = 1; i < totalPoints; i++) {
+                    pathD += `L ${points[i].x} ${points[i].y} `;
+                }
+
+                let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', pathD);
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke', '#6366f1'); 
+                path.setAttribute('stroke-width', '3.5');
+                path.setAttribute('stroke-linecap', 'round');
+                path.setAttribute('stroke-linejoin', 'round');
+                svg.appendChild(path);
+
+                let areaD = pathD + `L ${points[totalPoints - 1].x} ${height - paddingY} L ${points[0].x} ${height - paddingY} Z`;
+                
+                let defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                let grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+                grad.setAttribute('id', 'chart-gradient');
+                grad.setAttribute('x1', '0%');
+                grad.setAttribute('y1', '0%');
+                grad.setAttribute('x2', '0%');
+                grad.setAttribute('y2', '100%');
+                
+                let stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                stop1.setAttribute('offset', '0%');
+                stop1.setAttribute('stop-color', '#6366f1');
+                stop1.setAttribute('stop-opacity', '0.25');
+                
+                let stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                stop2.setAttribute('offset', '100%');
+                stop2.setAttribute('stop-color', '#6366f1');
+                stop2.setAttribute('stop-opacity', '0.00');
+
+                grad.appendChild(stop1);
+                grad.appendChild(stop2);
+                defs.appendChild(grad);
+                svg.appendChild(defs);
+
+                let area = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                area.setAttribute('d', areaD);
+                area.setAttribute('fill', 'url(#chart-gradient)');
+                svg.appendChild(area);
+            }
+
+            points.forEach((point, i) => {
+                let glow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                glow.setAttribute('cx', point.x);
+                glow.setAttribute('cy', point.y);
+                glow.setAttribute('r', '8');
+                glow.setAttribute('fill', '#6366f1');
+                glow.setAttribute('fill-opacity', '0.2');
+                svg.appendChild(glow);
+
+                let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', point.x);
+                circle.setAttribute('cy', point.y);
+                circle.setAttribute('r', '4');
+                circle.setAttribute('fill', '#ffffff');
+                circle.setAttribute('stroke', '#6366f1');
+                circle.setAttribute('stroke-width', '2.5');
+                svg.appendChild(circle);
+
+                let scoreText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                scoreText.setAttribute('x', point.x);
+                scoreText.setAttribute('y', point.y - 10);
+                scoreText.setAttribute('font-size', '8');
+                scoreText.setAttribute('font-family', 'monospace');
+                scoreText.setAttribute('font-weight', 'bold');
+                scoreText.setAttribute('text-anchor', 'middle');
+                scoreText.setAttribute('class', 'fill-slate-700 dark:fill-slate-350');
+                scoreText.textContent = `${point.score}%`;
+                svg.appendChild(scoreText);
+            });
         }
 
         // Start exam session
@@ -1562,30 +2075,60 @@
             const optionLetters = ['A', 'B', 'C'];
             q.opciones.forEach((optText, optIdx) => {
                 let isSelected = userAnswers[currentQuestionIndex] === optIdx;
+                let isAnswered = userAnswers[currentQuestionIndex] !== undefined;
+
+                let btnClass = "";
+                let indicatorClass = "";
+                let iconClass = "fa-circle text-slate-300 dark:text-slate-700";
+
+                if (simulationMode === 'practice' && isAnswered) {
+                    let isCorrectOpt = optIdx === q.correcta_index;
+                    let isSelectedOpt = isSelected;
+
+                    if (isCorrectOpt) {
+                        btnClass = "bg-emerald-50 border-emerald-500 dark:bg-emerald-950/20 dark:border-emerald-500 text-emerald-700 dark:text-emerald-300 font-semibold ring-2 ring-emerald-500/10";
+                        indicatorClass = "bg-emerald-500 text-white border-emerald-500";
+                        iconClass = "fa-solid fa-circle-check text-emerald-500";
+                    } else if (isSelectedOpt) {
+                        btnClass = "bg-red-50 border-red-500 dark:bg-red-950/20 dark:border-red-500 text-red-700 dark:text-red-300 font-semibold ring-2 ring-red-500/10";
+                        indicatorClass = "bg-red-500 text-white border-red-500";
+                        iconClass = "fa-solid fa-circle-xmark text-red-500";
+                    } else {
+                        btnClass = "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800/80 text-slate-400 dark:text-slate-600 pointer-events-none";
+                        indicatorClass = "bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-800 text-slate-300 dark:text-slate-700";
+                    }
+                } else {
+                    if (isSelected) {
+                        btnClass = "bg-indigo-50 border-indigo-500 dark:bg-indigo-950/30 dark:border-indigo-500 text-indigo-700 dark:text-indigo-300 font-semibold ring-2 ring-indigo-500/10";
+                        indicatorClass = "bg-indigo-500 text-white border-indigo-500 ring-2 ring-indigo-500/20";
+                        iconClass = "fa-solid fa-circle-dot text-indigo-500";
+                    } else {
+                        btnClass = "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700";
+                        indicatorClass = "bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-500 group-hover:bg-slate-200 dark:group-hover:bg-slate-800 group-hover:text-slate-700 dark:group-hover:text-slate-300";
+                        iconClass = "fa-regular fa-circle text-slate-300 dark:text-slate-700";
+                    }
+                }
+
                 let btn = document.createElement('button');
                 btn.id = `btn-opt-${optIdx}`;
-                btn.className = `w-full text-left p-4 rounded-xl border flex items-center justify-between transition-all duration-200 group text-xs md:text-sm hover:translate-x-1 ${
-                    isSelected 
-                        ? 'bg-indigo-50 border-indigo-500 dark:bg-indigo-950/30 dark:border-indigo-500 text-indigo-700 dark:text-indigo-300 font-semibold ring-2 ring-indigo-500/10' 
-                        : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'
-                }`;
-                btn.onclick = () => selectOption(optIdx);
+                btn.className = `w-full text-left p-4 rounded-xl border flex items-center justify-between transition-all duration-200 group text-xs md:text-sm hover:translate-x-1 ${btnClass}`;
+                if (simulationMode === 'practice' && isAnswered) {
+                    btn.disabled = true;
+                } else {
+                    btn.onclick = () => selectOption(optIdx);
+                }
 
                 btn.innerHTML = `
                     <span class="flex items-center space-x-3.5">
-                        <span class="w-7 h-7 rounded-lg border font-mono font-bold flex items-center justify-center text-xs shadow-sm transition-all duration-150 ${
-                            isSelected 
-                                ? 'bg-indigo-500 text-white border-indigo-500 ring-2 ring-indigo-500/20' 
-                                : 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-500 group-hover:bg-slate-200 dark:group-hover:bg-slate-800 group-hover:text-slate-700 dark:group-hover:text-slate-300'
-                        }">${optionLetters[optIdx]}</span>
+                        <span class="w-7 h-7 rounded-lg border font-mono font-bold flex items-center justify-center text-xs shadow-sm transition-all duration-150 ${indicatorClass}">${optionLetters[optIdx]}</span>
                         <span class="flex-1 leading-relaxed">${optText}</span>
                     </span>
-                    <i class="fa-regular ${isSelected ? 'fa-circle-dot text-indigo-500' : 'fa-circle text-slate-300 dark:text-slate-700'} text-sm shrink-0"></i>
+                    <i class="${iconClass.split(' ')[0]} ${iconClass.split(' ')[1]} text-sm shrink-0"></i>
                 `;
                 optContainer.appendChild(btn);
             });
 
-            if (userAnswers[currentQuestionIndex] !== undefined) {
+            if (simulationMode === 'practice' && userAnswers[currentQuestionIndex] !== undefined) {
                 showExplanation();
             }
 
@@ -1745,6 +2288,24 @@
             let finalPercent = Math.round((hits / examQuestions.length) * 100);
 
             let today = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            
+            // Save to localStorage history list
+            let history = [];
+            try {
+                history = JSON.parse(localStorage.getItem('exam_history')) || [];
+            } catch (e) {
+                history = [];
+            }
+            history.push({
+                score: finalPercent,
+                type: currentExamMode,
+                date: today
+            });
+            if (history.length > 10) {
+                history.shift();
+            }
+            localStorage.setItem('exam_history', JSON.stringify(history));
+
             localStorage.setItem('last_exam_score', finalPercent);
             localStorage.setItem('last_exam_type', currentExamMode);
             localStorage.setItem('last_exam_date', today);
