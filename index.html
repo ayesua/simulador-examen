@@ -1,0 +1,2419 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador EXANI-I Pro | V3.5 Live</title>
+    
+    <!-- Meta tags for SEO & browser options -->
+    <meta name="description" content="Simulador de examen EXANI-I Pro de alto rendimiento para aspirantes a Educación Media Superior. Generador dinámico de reactivos, pizarra digital, formulario interactivo e integración de IA opcional con salvaguarda de cobro.">
+    <meta name="theme-color" content="#4f46e5">
+
+    <!-- Fonts: Inter for reading, JetBrains Mono for math/code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (v3 Play CDN) with dark mode configurator -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome v6.4.0 for rich icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS for advanced scrollbars, canvas cursors, and glow styles -->
+    <style>
+        /* Custom Scrollbar Styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 9999px;
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.25);
+        }
+
+        /* Glassmorphism effects */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .dark .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Drawing canvas custom styling */
+        #scratchpad-canvas {
+            touch-action: none;
+            cursor: crosshair;
+        }
+
+        /* Text transitions */
+        .fade-enter {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+        }
+        .fade-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen font-sans antialiased transition-colors duration-300 flex flex-col">
+
+    <!-- HEADER / NAVIGATION TOOLBAR -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-indigo-500 to-violet-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/20">
+                    <i class="fa-solid fa-graduation-cap text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold tracking-tight bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                        EXANI-I Pro
+                    </h1>
+                    <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block -mt-1 tracking-wider uppercase">
+                        V3.5 Live Simulator
+                    </span>
+                </div>
+            </div>
+
+            <!-- Global Timer & State Indicators (Only visible during active exam) -->
+            <div id="header-exam-status" class="hidden flex items-center space-x-6">
+                <!-- Session Timer -->
+                <div class="flex items-center space-x-2 bg-slate-100 dark:bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 font-mono text-sm">
+                    <i class="fa-regular fa-clock text-indigo-500 animate-pulse"></i>
+                    <span id="timer-display" class="font-bold text-slate-700 dark:text-slate-300">03:00:00</span>
+                </div>
+                <!-- Progress Percentage -->
+                <div class="hidden md:flex items-center space-x-2 text-xs text-slate-500">
+                    <span id="header-progress-text">Pregunta 1 de 160</span>
+                </div>
+            </div>
+
+            <!-- Toolbar Actions -->
+            <div class="flex items-center space-x-2 md:space-x-3">
+                <!-- Gemini AI Status Indicator / Configuration Button -->
+                <button id="btn-gemini-config" onclick="toggleGeminiModal(true)" class="relative group p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-950/80 rounded-xl transition-all duration-200 border border-transparent hover:border-slate-200 dark:hover:border-slate-800" title="Configurar Gemini IA (Opcional - Gratuita)">
+                    <span id="gemini-status-dot" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500"></span>
+                    <i class="fa-solid fa-brain text-lg group-hover:scale-105 transition-transform duration-200"></i>
+                </button>
+
+                <!-- Tool Buttons (Scratchpad & Formulas) -->
+                <button id="btn-toggle-scratchpad" onclick="toggleScratchpad()" class="hidden md:flex items-center space-x-2 px-3.5 py-2 text-sm font-medium rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-300 transition-all duration-200">
+                    <i class="fa-solid fa-pen-ruler text-indigo-500"></i>
+                    <span>Pizarra</span>
+                </button>
+
+                <button id="btn-toggle-formulas" onclick="toggleFormulas()" class="hidden md:flex items-center space-x-2 px-3.5 py-2 text-sm font-medium rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-700 dark:text-slate-300 transition-all duration-200">
+                    <i class="fa-solid fa-book-open text-violet-500"></i>
+                    <span>Fórmulas</span>
+                </button>
+
+                <!-- Dark/Light Theme Toggle -->
+                <button id="btn-theme-toggle" onclick="toggleTheme()" class="p-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl transition-all duration-200" title="Cambiar Tema">
+                    <i class="fa-solid fa-moon dark:hidden text-lg"></i>
+                    <i class="fa-solid fa-sun hidden dark:block text-lg text-amber-400"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN VIEWPORT CONTAINER -->
+    <main id="main-content" class="flex-1 flex flex-col items-center justify-center p-4 md:p-6 lg:p-8 max-w-[1600px] w-full mx-auto">
+        
+        <!-- ==================== WELCOME & SETUP SCREEN ==================== -->
+        <section id="welcome-screen" class="w-full max-w-4xl py-6 md:py-12 flex flex-col space-y-8 animate-fade-enter">
+            <!-- Hero Banner -->
+            <div class="text-center space-y-3">
+                <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-indigo-500/10 text-indigo-500 dark:text-indigo-400 tracking-wide uppercase border border-indigo-500/20">
+                    Preparación Científica Media Superior
+                </span>
+                <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                    Entrenamiento Inteligente <span class="bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">CENEVAL EXANI-I</span>
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
+                    Domina el examen de admisión oficial. Practica con nuestro banco de preguntas dinámicas que cambian sus valores matemáticos y sintácticos en cada intento, con la opción de conectar Gemini IA mediante su plan de uso gratuito sin costo alguno.
+                </p>
+            </div>
+
+            <!-- Mode Selector Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                <!-- Mode A: Diagnostic Exam -->
+                <div class="group relative bg-white dark:bg-slate-900/60 rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-slate-800/80 shadow-xl shadow-slate-100 dark:shadow-none hover:shadow-indigo-500/5 hover:border-indigo-500/40 dark:hover:border-indigo-500/40 transition-all duration-300 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-200">
+                            <i class="fa-solid fa-gauge-high"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-indigo-500 transition-colors duration-200">
+                                Examen Diagnóstico
+                            </h3>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm mt-2 leading-relaxed">
+                                Una prueba ágil de <strong>30 reactivos</strong> seleccionados al azar. Ideal para identificar rápidamente tus fortalezas y debilidades en los 5 temas principales del temario de forma rápida.
+                            </p>
+                        </div>
+                        <ul class="space-y-2 text-xs text-slate-500 dark:text-slate-400">
+                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-emerald-500"></i> <span>6 reactivos por cada habilidad clave</span></li>
+                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-emerald-500"></i> <span>Duración máxima de 45 minutos</span></li>
+                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-emerald-500"></i> <span>Soporte remedial interactivo al finalizar</span></li>
+                        </ul>
+                    </div>
+                    <button id="btn-start-diagnostic" onclick="startExam('diagnostic')" class="w-full mt-6 py-3 px-5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all duration-200 shadow-md shadow-indigo-600/10 hover:shadow-indigo-500/20 active:scale-95">
+                        Iniciar Diagnóstico
+                    </button>
+                </div>
+
+                <!-- Mode B: Full Exam -->
+                <div class="group relative bg-white dark:bg-slate-900/60 rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-slate-800/80 shadow-xl shadow-slate-100 dark:shadow-none hover:shadow-violet-500/5 hover:border-violet-500/40 dark:hover:border-violet-500/40 transition-all duration-300 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-violet-500/10 text-violet-500 flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-200">
+                            <i class="fa-solid fa-fire"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-violet-500 transition-colors duration-200">
+                                Examen Completo CENEVAL
+                            </h3>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm mt-2 leading-relaxed">
+                                Simulación rigurosa del examen real con <strong>160 reactivos</strong> distribuidos con exactitud según el plan oficial del CENEVAL para el EXANI-I.
+                            </p>
+                        </div>
+                        <ul class="space-y-2 text-xs text-slate-500 dark:text-slate-400">
+                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-emerald-500"></i> <span>32 reactivos por tema en proporciones oficiales</span></li>
+                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-emerald-500"></i> <span>Temporizador de 3 horas continuas</span></li>
+                            <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-emerald-500"></i> <span>Simulación completa de hojas de pasajes largos</span></li>
+                        </ul>
+                    </div>
+                    <button id="btn-start-full" onclick="startExam('full')" class="w-full mt-6 py-3 px-5 text-sm font-semibold text-white bg-violet-600 hover:bg-violet-500 rounded-xl transition-all duration-200 shadow-md shadow-violet-600/10 hover:shadow-violet-500/20 active:scale-95">
+                        Iniciar Simulador Completo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Historical performance logs from localStorage -->
+            <div id="stats-banner" class="hidden bg-slate-100/50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-4">
+                    <div class="text-amber-500 text-2xl px-2">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200">Último Desempeño Registrado</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Completado el <span id="last-exam-date">03/06/2026</span></p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6 text-center">
+                    <div class="px-3 border-r border-slate-200 dark:border-slate-800">
+                        <span id="last-exam-score" class="text-xl font-extrabold text-indigo-500">84%</span>
+                        <span class="block text-[10px] text-slate-400 uppercase tracking-wide">Aciertos</span>
+                    </div>
+                    <div class="px-3">
+                        <span id="last-exam-type" class="text-sm font-bold text-slate-700 dark:text-slate-300">Diagnóstico</span>
+                        <span class="block text-[10px] text-slate-400 uppercase tracking-wide">Modo</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== EXAM INTERFACE (SPLIT SCREEN & NORMAL) ==================== -->
+        <section id="exam-screen" class="hidden w-full flex-1 flex flex-col gap-6 animate-fade-enter">
+            <!-- Progress indicator and review map trigger -->
+            <div class="w-full flex items-center justify-between gap-4">
+                <div class="flex-1">
+                    <div class="flex justify-between items-center text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">
+                        <span id="badge-question-domain" class="px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-500 border border-indigo-500/10">Pensamiento Matemático</span>
+                        <span id="badge-question-subtopic" class="text-slate-400 dark:text-slate-500">Subtema: Teorema de Pitágoras</span>
+                    </div>
+                    <!-- Custom animatable progress bar wrapper -->
+                    <div class="w-full h-2.5 bg-slate-200 dark:bg-slate-900 rounded-full overflow-hidden border border-slate-300/20">
+                        <div id="progress-bar-fill" class="h-full bg-gradient-to-r from-indigo-500 to-violet-600 w-0 transition-all duration-300 rounded-full"></div>
+                    </div>
+                </div>
+                <!-- Review Map Trigger -->
+                <button id="btn-toggle-map" onclick="toggleQuestionMap()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center space-x-2 transition-all duration-200 active:scale-95">
+                    <i class="fa-solid fa-qrcode"></i>
+                    <span>Mapa de Reactivos</span>
+                </button>
+            </div>
+
+            <!-- Double Column layout for Passage Questions / Centered single card for other questions -->
+            <div id="exam-layout-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch w-full flex-1">
+                
+                <!-- LEFT PANEL: Long Passages (Show/Hide dynamically) -->
+                <div id="reading-passage-panel" class="hidden bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 md:p-8 flex flex-col h-[calc(100vh-14rem)] lg:h-[calc(100vh-16rem)] overflow-y-auto min-h-[400px]">
+                    <div class="sticky top-0 bg-white dark:bg-slate-900/80 backdrop-blur-md pb-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between z-10 -mt-2 -mx-2 px-2">
+                        <div class="flex items-center space-x-2 text-indigo-500">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                            <h3 class="font-bold text-sm uppercase tracking-wide">Lectura de Comprensión</h3>
+                        </div>
+                        <!-- Font size adjustment -->
+                        <div class="flex items-center space-x-1.5">
+                            <button onclick="adjustReadingFontSize(-1)" class="w-8 h-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold border border-slate-200 dark:border-slate-800" title="Reducir letra">A-</button>
+                            <button onclick="adjustReadingFontSize(1)" class="w-8 h-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold border border-slate-200 dark:border-slate-800" title="Aumentar letra">A+</button>
+                        </div>
+                    </div>
+                    <div id="reading-passage-content" class="prose dark:prose-invert prose-indigo max-w-none text-slate-700 dark:text-slate-300 mt-6 space-y-4 leading-relaxed font-sans text-base transition-all duration-150">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- RIGHT PANEL: Question content (Spans 2 cols if reading is hidden) -->
+                <div id="question-card-panel" class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 md:p-8 flex flex-col justify-between h-[calc(100vh-14rem)] lg:h-[calc(100vh-16rem)] overflow-y-auto min-h-[400px]">
+                    
+                    <div class="space-y-6">
+                        <!-- AI Helper Top Info & Trigger -->
+                        <div id="gemini-reactivo-bar" class="flex items-center justify-between border-b border-dashed border-slate-200 dark:border-slate-800 pb-4">
+                            <span class="text-xs text-slate-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-microchip"></i>
+                                Reactivo Local Parametrizado
+                            </span>
+                            <!-- AI Mode trigger -->
+                            <div class="flex items-center space-x-3">
+                                <button id="btn-ai-generate-alt" onclick="requestGeminiAltQuestion()" class="hidden text-xs font-bold text-indigo-500 hover:text-indigo-400 flex items-center space-x-1.5 transition-colors duration-150">
+                                    <i class="fa-solid fa-wand-magic-sparkles animate-pulse"></i>
+                                    <span>Alternativo con IA</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Question Statement -->
+                        <div class="space-y-4">
+                            <h4 id="question-text" class="text-base md:text-lg font-bold text-slate-950 dark:text-slate-50 leading-relaxed font-sans">
+                                Carga de reactivo...
+                            </h4>
+                        </div>
+
+                        <!-- 3 Response Options (A, B, C) -->
+                        <div id="options-container" class="space-y-3 pt-2">
+                            <!-- Dynamic render of 3 option buttons -->
+                        </div>
+                    </div>
+
+                    <!-- Question Explanation & IA Pedagogical Help -->
+                    <div id="explanation-box" class="hidden mt-6 bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-3 animate-fade-enter">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-emerald-500 uppercase tracking-wide flex items-center gap-1.5">
+                                <i class="fa-solid fa-circle-check"></i> Explicación Pedagógica
+                            </span>
+                            <button id="btn-ask-gemini-explanation" onclick="requestGeminiExplanation()" class="hidden px-2.5 py-1 bg-violet-600 hover:bg-violet-500 text-[10px] font-bold text-white rounded-lg flex items-center space-x-1.5 transition-colors duration-150 shadow-md">
+                                <i class="fa-solid fa-robot"></i>
+                                <span>Profundizar con IA</span>
+                            </button>
+                        </div>
+                        <div id="explanation-text" class="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Aún no disponible.
+                        </div>
+                    </div>
+
+                    <!-- Bottom Nav Controls -->
+                    <div class="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-6 mt-6">
+                        <button id="btn-prev-question" onclick="prevQuestion()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center space-x-2 transition-all duration-200 active:scale-95 disabled:opacity-40 disabled:pointer-events-none">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span>Anterior</span>
+                        </button>
+
+                        <button id="btn-mark-review" onclick="toggleMarkedForReview()" class="px-4 py-2.5 border border-slate-200 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-amber-950/20 hover:border-amber-500/40 rounded-xl text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-amber-500 transition-all duration-200 flex items-center space-x-2 active:scale-95">
+                            <i class="fa-regular fa-bookmark"></i>
+                            <span id="btn-mark-review-text">Marcar Revisión</span>
+                        </button>
+
+                        <button id="btn-next-question" onclick="nextQuestion()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-600/10 hover:shadow-indigo-500/20 flex items-center space-x-2 transition-all duration-200 active:scale-95">
+                            <span id="btn-next-text">Siguiente</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- QUESTION MAP COLLAPSIBLE DRAWER -->
+            <div id="question-map-drawer" class="hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xl transition-all duration-300">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800 mb-4">
+                    <h4 class="font-bold text-sm flex items-center gap-2 text-slate-800 dark:text-slate-200">
+                        <i class="fa-solid fa-list-ol text-indigo-500"></i>
+                        Estructura de la Evaluación
+                    </h4>
+                    <span class="text-xs text-slate-400" id="map-answered-counter">0 / 160 Respondidas</span>
+                </div>
+                <div id="question-grid" class="grid grid-cols-6 sm:grid-cols-10 md:grid-cols-15 lg:grid-cols-20 gap-2 max-h-40 overflow-y-auto p-1">
+                    <!-- Dynamic button grid -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== RESULTS & STATS SCREEN ==================== -->
+        <section id="results-screen" class="hidden w-full max-w-5xl py-6 md:py-10 flex flex-col space-y-8 animate-fade-enter">
+            <!-- Overall Result Badge & Pie Chart -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 shadow-xl shadow-slate-100 dark:shadow-none">
+                <!-- Radial Progress SVG Gauge -->
+                <div class="relative w-44 h-44 flex items-center justify-center">
+                    <svg class="w-full h-full transform -rotate-90">
+                        <!-- Track -->
+                        <circle cx="88" cy="88" r="76" stroke-width="12" stroke="currentColor" class="text-slate-100 dark:text-slate-800/80" fill="transparent" />
+                        <!-- Indicator -->
+                        <circle id="results-radial-indicator" cx="88" cy="88" r="76" stroke-width="12" stroke-dasharray="477" stroke-dashoffset="477" stroke-linecap="round" stroke="currentColor" class="text-indigo-500 transition-all duration-1000 ease-out" fill="transparent" />
+                    </svg>
+                    <div class="absolute text-center">
+                        <span id="results-percent-text" class="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">0%</span>
+                        <span class="block text-[10px] text-slate-400 uppercase tracking-widest mt-0.5">Aciertos</span>
+                    </div>
+                </div>
+
+                <div class="flex-1 space-y-4 text-center md:text-left">
+                    <div class="space-y-1">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase bg-emerald-500/10 text-emerald-500 border border-emerald-500/20" id="results-status-badge">
+                            Aprobado
+                        </span>
+                        <h3 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white">
+                            Análisis General del Desempeño
+                        </h3>
+                    </div>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-xl">
+                        Has finalizado el examen simulador. En la sección inferior se detallan tus porcentajes de efectividad en cada una de las 5 habilidades de CENEVAL. Revisa las preguntas falladas y genera un Examen Remedial personalizado para concentrarte en tus áreas críticas.
+                    </p>
+                    <div class="flex flex-wrap justify-center md:justify-start gap-4 text-xs font-medium">
+                        <div class="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200/50 dark:border-slate-700/50">
+                            Aciertos: <span id="results-hits-badge" class="font-bold text-indigo-500">0</span>
+                        </div>
+                        <div class="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200/50 dark:border-slate-700/50">
+                            Errores: <span id="results-misses-badge" class="font-bold text-red-400">0</span>
+                        </div>
+                        <div class="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200/50 dark:border-slate-700/50">
+                            Tiempo: <span id="results-time-badge" class="font-bold text-slate-600 dark:text-slate-300">00:00:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill Segment Performance (5 skills) -->
+            <div class="space-y-4">
+                <h4 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-chart-simple text-indigo-500"></i>
+                    Desempeño Segmentado por Habilidad
+                </h4>
+                <div id="results-skills-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Dynamic rendering of skill progress cards -->
+                </div>
+            </div>
+
+            <!-- Remedial exam proposal & navigation back -->
+            <div class="bg-gradient-to-r from-indigo-900 to-slate-900 text-white rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl border border-indigo-500/10">
+                <div class="space-y-2 text-center md:text-left">
+                    <h4 class="text-xl font-bold flex items-center justify-center md:justify-start gap-2">
+                        <i class="fa-solid fa-hand-holding-medical text-indigo-400 animate-bounce"></i>
+                        ¿Quieres corregir tus puntos débiles?
+                    </h4>
+                    <p class="text-xs md:text-sm text-slate-300 max-w-xl">
+                        El motor remedial ha recopilado todos los subtemas que fallaste en esta sesión. Genera una evaluación de refuerzo para resolver dudas y consolidar tu aprendizaje en esos puntos de inmediato.
+                    </p>
+                </div>
+                <button id="btn-start-remedial" onclick="startRemedialExam()" class="shrink-0 w-full md:w-auto py-3.5 px-6 font-semibold bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 rounded-xl text-sm transition-all duration-200 shadow-lg shadow-indigo-500/20 active:scale-95 disabled:opacity-40 disabled:pointer-events-none">
+                    Generar Examen Remedial
+                </button>
+            </div>
+
+            <!-- Detailed error list -->
+            <div id="results-errors-section" class="space-y-4">
+                <h4 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation text-red-500"></i>
+                    Análisis Detallado de Fallas (<span id="results-errors-count">0</span>)
+                </h4>
+                <div id="results-errors-container" class="space-y-4">
+                    <!-- Dynamic render of incorrect questions -->
+                </div>
+            </div>
+
+            <div class="flex items-center justify-center pt-6">
+                <button onclick="resetToWelcome()" class="px-6 py-3 border border-slate-300 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl text-sm font-semibold transition-all duration-150 active:scale-95">
+                    Volver al Inicio
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FLOATING PIZARRA DIGITAL (SCRATCHPAD) -->
+    <div id="scratchpad-window" class="hidden fixed top-24 right-4 md:right-8 w-80 md:w-96 bg-white dark:bg-slate-900/95 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl overflow-hidden z-50 transition-transform duration-200 select-none">
+        <!-- Header / Drag Handle -->
+        <div id="scratchpad-header" class="bg-slate-100 dark:bg-slate-950 px-4 py-3 flex items-center justify-between cursor-move select-none">
+            <span class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                <i class="fa-solid fa-pen-ruler text-indigo-500"></i> Pizarra Digital
+            </span>
+            <div class="flex items-center space-x-2">
+                <button onclick="clearScratchpad()" class="text-xs font-semibold text-slate-500 hover:text-red-400 px-2 py-0.5 rounded transition-colors" title="Limpiar todo">Limpiar</button>
+                <button onclick="toggleScratchpad()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xs px-1"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <!-- Canvas area -->
+        <div class="p-3 bg-slate-50 dark:bg-slate-900 flex flex-col items-center">
+            <canvas id="scratchpad-canvas" class="w-full h-64 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl shadow-inner"></canvas>
+        </div>
+        <!-- Toolbox controls -->
+        <div class="px-4 py-3 bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
+            <!-- Colors -->
+            <div class="flex items-center space-x-1.5">
+                <button onclick="setScratchpadColor('#EF4444')" class="w-5 h-5 rounded-full bg-red-500 border-2 border-transparent hover:scale-115 transition-transform" id="color-red" title="Rojo"></button>
+                <button onclick="setScratchpadColor('#3B82F6')" class="w-5 h-5 rounded-full bg-blue-500 border-2 border-transparent hover:scale-115 transition-transform" id="color-blue" title="Azul"></button>
+                <button onclick="setScratchpadColor('#10B981')" class="w-5 h-5 rounded-full bg-emerald-500 border-2 border-transparent hover:scale-115 transition-transform" id="color-emerald" title="Verde"></button>
+                <button onclick="setScratchpadColor('theme-color')" class="w-5 h-5 rounded-full bg-slate-900 dark:bg-white border-2 border-slate-300 hover:scale-115 transition-transform" id="color-theme" title="Pincel"></button>
+                <button onclick="setScratchpadEraser()" class="w-5 h-5 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 flex items-center justify-center text-[10px]" id="tool-eraser" title="Borrador">
+                    <i class="fa-solid fa-eraser text-slate-600 dark:text-slate-400"></i>
+                </button>
+            </div>
+            <!-- Stroke size -->
+            <div class="flex items-center space-x-1 bg-white dark:bg-slate-900 rounded-lg p-0.5 border border-slate-200 dark:border-slate-800">
+                <button onclick="setScratchpadSize(2)" class="px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold" id="size-fine">Fino</button>
+                <button onclick="setScratchpadSize(5)" class="px-2 py-1 rounded bg-indigo-500/10 text-indigo-500 font-semibold" id="size-med">Medio</button>
+                <button onclick="setScratchpadSize(10)" class="px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold" id="size-thick">Grueso</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORMULAS SHEET SIDEBAR / DRAWER -->
+    <div id="formulas-drawer" class="fixed top-0 right-0 h-full w-80 md:w-96 bg-white dark:bg-slate-900/95 border-l border-slate-200 dark:border-slate-800 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+        <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-100 dark:bg-slate-950">
+            <span class="font-bold text-sm flex items-center gap-2 text-slate-800 dark:text-slate-200">
+                <i class="fa-solid fa-book-open text-violet-500"></i>
+                Formulario de Consulta
+            </span>
+            <button onclick="toggleFormulas()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+        
+        <!-- Accordion wrapper -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-3">
+            
+            <!-- Section 1: Algebra -->
+            <div class="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                <button onclick="toggleAccordion('acc-algebra')" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-900/40 text-left font-bold text-xs md:text-sm flex items-center justify-between text-slate-700 dark:text-slate-300">
+                    <span>Álgebra y Funciones</span>
+                    <i id="icon-acc-algebra" class="fa-solid fa-chevron-down transition-transform duration-200"></i>
+                </button>
+                <div id="acc-algebra" class="hidden p-4 bg-white dark:bg-slate-900/30 border-t border-slate-200 dark:border-slate-800 text-xs font-mono space-y-3 text-slate-600 dark:text-slate-400">
+                    <div>
+                        <span class="text-indigo-400 block font-semibold text-[10px] uppercase">Ecuación Cuadrática</span>
+                        <div class="bg-slate-50 dark:bg-slate-950 p-2 rounded mt-1 border border-slate-200/50 dark:border-slate-800/50">
+                            ax² + bx + c = 0 <br>
+                            x = (-b ± √(b² - 4ac)) / 2a
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-indigo-400 block font-semibold text-[10px] uppercase">Productos Notables</span>
+                        <div class="bg-slate-50 dark:bg-slate-950 p-2 rounded mt-1 border border-slate-200/50 dark:border-slate-800/50 space-y-1">
+                            <div>(a + b)² = a² + 2ab + b²</div>
+                            <div>(a - b)(a + b) = a² - b²</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Geometry -->
+            <div class="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                <button onclick="toggleAccordion('acc-geometry')" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-900/40 text-left font-bold text-xs md:text-sm flex items-center justify-between text-slate-700 dark:text-slate-300">
+                    <span>Geometría y Trigonometría</span>
+                    <i id="icon-acc-geometry" class="fa-solid fa-chevron-down transition-transform duration-200"></i>
+                </button>
+                <div id="acc-geometry" class="hidden p-4 bg-white dark:bg-slate-900/30 border-t border-slate-200 dark:border-slate-800 text-xs font-mono space-y-3 text-slate-600 dark:text-slate-400">
+                    <div>
+                        <span class="text-indigo-400 block font-semibold text-[10px] uppercase">Teorema de Pitágoras</span>
+                        <div class="bg-slate-50 dark:bg-slate-950 p-2 rounded mt-1 border border-slate-200/50 dark:border-slate-800/50">
+                            c² = a² + b² <br>
+                            (c: hipotenusa, a/b: catetos)
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-indigo-400 block font-semibold text-[10px] uppercase">Razones Trigonométricas</span>
+                        <div class="bg-slate-50 dark:bg-slate-950 p-2 rounded mt-1 border border-slate-200/50 dark:border-slate-800/50 space-y-1">
+                            <div>sen(θ) = C. Opuesto / Hipotenusa</div>
+                            <div>cos(θ) = C. Adyacente / Hipotenusa</div>
+                            <div>tan(θ) = C. Opuesto / C. Adyacente</div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-indigo-400 block font-semibold text-[10px] uppercase">Áreas Básicas</span>
+                        <div class="bg-slate-50 dark:bg-slate-950 p-2 rounded mt-1 border border-slate-200/50 dark:border-slate-800/50 space-y-1">
+                            <div>Triángulo: A = (b · h) / 2</div>
+                            <div>Círculo: A = π · r²</div>
+                            <div>Trapecio: A = (B + b)h / 2</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Physics & Chemistry -->
+            <div class="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                <button onclick="toggleAccordion('acc-physics')" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-900/40 text-left font-bold text-xs md:text-sm flex items-center justify-between text-slate-700 dark:text-slate-300">
+                    <span>Física y Química</span>
+                    <i id="icon-acc-physics" class="fa-solid fa-chevron-down transition-transform duration-200"></i>
+                </button>
+                <div id="acc-physics" class="hidden p-4 bg-white dark:bg-slate-900/30 border-t border-slate-200 dark:border-slate-800 text-xs font-mono space-y-3 text-slate-600 dark:text-slate-400">
+                    <div>
+                        <span class="text-indigo-400 block font-semibold text-[10px] uppercase">Cinemática</span>
+                        <div class="bg-slate-50 dark:bg-slate-950 p-2 rounded mt-1 border border-slate-200/50 dark:border-slate-800/50 space-y-1">
+                            <div>v = d / t (Velocidad)</div>
+                            <div>a = (v_f - v_0) / t (Aceleración)</div>
+                            <div>d = v_0·t + (a·t²)/2</div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-indigo-400 block font-semibold text-[10px] uppercase">Dinámica y Energía</span>
+                        <div class="bg-slate-50 dark:bg-slate-950 p-2 rounded mt-1 border border-slate-200/50 dark:border-slate-800/50 space-y-1">
+                            <div>F = m · a (2ª Ley de Newton)</div>
+                            <div>Ep = m · g · h (En. Potencial, g ≈ 10 m/s²)</div>
+                            <div>Ek = (m · v²) / 2 (En. Cinética)</div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-indigo-400 block font-semibold text-[10px] uppercase">Materia</span>
+                        <div class="bg-slate-50 dark:bg-slate-950 p-2 rounded mt-1 border border-slate-200/50 dark:border-slate-800/50">
+                            Densidad: ρ = m / V <br>
+                            Masa molar: n = m / M
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- GEMINI CONFIGURATION MODAL -->
+    <div id="gemini-config-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 md:p-8 space-y-6 shadow-2xl relative animate-fade-enter">
+            <!-- Close -->
+            <button onclick="toggleGeminiModal(false)" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 rounded-xl bg-violet-500/10 text-violet-500 flex items-center justify-center text-2xl mx-auto">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Gemini IA (Opcional y Gratis)</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                    Ingresa tu API Key de Google AI Studio para habilitar explicaciones extendidas y preguntas por IA. 
+                </p>
+                <div class="p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl text-left space-y-1.5">
+                    <span class="text-[10px] font-bold text-amber-500 uppercase tracking-wider block"><i class="fa-solid fa-shield-halved"></i> Salvaguarda Antigobos Activa</span>
+                    <p class="text-[10px] text-slate-600 dark:text-slate-400 leading-normal">
+                        El plan gratuito de Google AI Studio **no** requiere tarjetas de crédito y nunca realiza cargos monetarios. Por seguridad, si la API reportara requerimiento de pago (Error 402) o costo, la integración se desactivará automáticamente y volverá al modo local offline.
+                    </p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <div class="flex justify-between items-center mb-1.5">
+                        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">API Key de Google AI Studio</label>
+                        <a href="https://aistudio.google.com/" target="_blank" class="text-[10px] text-indigo-500 hover:underline">Obtener Clave Gratis <i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i></a>
+                    </div>
+                    <div class="relative">
+                        <input type="password" id="input-gemini-key" placeholder="AIzaSy..." class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs md:text-sm font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-slate-800 dark:text-slate-100">
+                        <button onclick="toggleKeyVisibility()" class="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs"><i class="fa-solid fa-eye" id="key-visibility-icon"></i></button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wide">Modelo Seleccionado</label>
+                    <select id="select-gemini-model" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs md:text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-100">
+                        <option value="gemini-2.5-flash">Gemini 2.5 Flash (Recomendado - Rápido y Gratis)</option>
+                        <option value="gemini-1.5-flash">Gemini 1.5 Flash (Gratis)</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center space-x-2 pt-2">
+                    <input type="checkbox" id="checkbox-ai-mode" class="rounded text-indigo-600 focus:ring-indigo-500 bg-slate-100 border-slate-300 dark:bg-slate-950 dark:border-slate-800">
+                    <label for="checkbox-ai-mode" class="text-xs font-semibold text-slate-600 dark:text-slate-300">Activar IA Generativa en Exámenes</label>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-3 pt-2">
+                <button onclick="testGeminiConnection()" id="btn-test-connection" class="flex-1 py-2.5 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 transition-colors">
+                    Probar Conexión
+                </button>
+                <button onclick="saveGeminiConfig()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-600/10 transition-colors">
+                    Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN SIMULATOR APPLICATION JAVASCRIPT -->
+    <script>
+        // ==================== STATE MANAGEMENT ====================
+        let currentExamMode = 'diagnostic'; // diagnostic | full | remedial
+        let examQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = {}; // questionIndex -> selectedOptionIndex (0, 1, or 2)
+        let reviewList = new Set(); // indices of questions flagged for review
+        let examTimer = null;
+        let examTimeRemaining = 0; // seconds
+        let examStartTime = 0; // seconds
+
+        // Gemini AI Configuration
+        let geminiApiKey = localStorage.getItem('gemini_api_key') || '';
+        let geminiModel = localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
+        let aiModeEnabled = localStorage.getItem('gemini_ai_enabled') === 'true';
+
+        // Reading passage visual settings
+        let readingFontSize = 16; // px
+
+        // ==================== GENERATORS AND LOCAL BANK (+500 VARIABILITY) ====================
+        
+        // Pythagorean triples helper for dynamic values
+        const PYTHAGOREAN_TRIPLES = [
+            [3, 4, 5],
+            [5, 12, 13],
+            [8, 15, 17],
+            [7, 24, 25]
+        ];
+
+        const SPANISH_NAMES = ["Sofía", "Mateo", "Valentina", "Santiago", "Camila", "Sebastián", "Isabella", "Alejandro", "Daniela", "Diego", "Jimena", "Ángel", "Valeria", "Nicolás", "Mariana", "Emiliano"];
+        const MATH_OBJECTS = ["libretas", "plumas", "manzanas", "juguetes", "paletas", "refrescos", "camisas", "mochilas"];
+
+        // Static passages for Reading Comprehension
+        const LECTURAS = [
+            {
+                id: 'lectura-sars',
+                titulo: "El Impacto del SARS-CoV-2 y la Respuesta Inmunológica",
+                texto: `<p>El SARS-CoV-2, causante de la enfermedad COVID-19, se caracteriza por poseer una envoltura con proyecciones moleculares llamadas <strong>proteínas Spike (S)</strong>. Estas espículas tienen una afinidad específica por el receptor celular humano <strong>ACE2 (Enzima Convertidora de Angiotensina 2)</strong>, el cual se expresa en altos niveles en las células epiteliales del sistema respiratorio, principalmente en los alvéolos pulmonares.</p>
+                <p>Al acoplarse con el receptor ACE2, la membrana del virus se fusiona con la celular, inyectando su ARN de cadena sencilla en el citoplasma. Una vez allí, el virus secuestra el aparato ribosómico del hospedero para sintetizar copias de sus propias proteínas estructurales y replicar su material genético. Este proceso resulta en el lisado o lisis de la célula del hospedero y la liberación de miles de nuevos viriones dispuestos a infectar células vecinas.</p>
+                <p>La respuesta inmune primaria ante esta agresión comienza con los macrófagos y células dendríticas, que fagocitan restos celulares y presentan fragmentos del antígeno viral a los linfocitos T colaboradores (CD4+). Éstos a su vez activan a los linfocitos B para que diferencien en células plasmáticas productoras de anticuerpos específicos (IgM e IgG) encargados de neutralizar la proteína Spike. Simultáneamente, los linfocitos T citotóxicos (CD8+) identifican y destruyen las células corporales que han sido colonizadas por el patógeno, evitando así la propagación viral. Sin embargo, en casos severos, una hiperactivación inmune desencadena una liberación descontrolada de citoquinas inflamatorias (tormenta de citoquinas), causando daño tisular generalizado que puede atenuar o poner en riesgo la función pulmonar.</p>`
+            },
+            {
+                id: 'lectura-icaro',
+                titulo: "El Vuelo de Ícaro (Mito Clásico)",
+                texto: `<p>Dédalo era el arquitecto y artesano más hábil de Atenas, célebre por haber construido el laberinto de Creta donde el rey Minos encerraba al temible Minotauro. No obstante, al caer en desgracia con el monarca, Dédalo fue encarcelado en una alta torre de la isla junto a su joven hijo, Ícaro. Sabiendo que el rey controlaba todas las vías de escape marítimas y terrestres, el astuto inventor comprendió que el único camino libre para huir era el cielo.</p>
+                <p>Reuniendo plumas de gaviotas y otras aves que anidaban en las cornisas de la prisión, Dédalo comenzó a unirlas meticulosamente con hilo y cera de abejas, dando forma a dos enormes pares de alas. Conforme trabajaba, su hijo Ícaro jugueteaba travieso con las plumas que volaban y moldeaba la cera con sus manos, ignorando el peligro latente de la osada empresa familiar.</p>
+                <p>Antes de emprender el vuelo hacia la libertad, Dédalo miró con gravedad a su hijo y le advirtió: <em>«Escúchame bien, Ícaro: no debes volar demasiado bajo, pues la humedad del mar pesará en tus plumas y caerás; ni debes volar demasiado alto, porque el intenso calor del sol derretirá la cera de tus alas. Mantén el rumbo intermedio, justo detrás de mí»</em>.</p>
+                <p>Padre e hijo saltaron al vacío, batiendo las alas con fuerza. Al principio, Ícaro sintió un profundo temor, pero pronto la embriagadora sensación de libertad y el dominio del viento lo llenaron de una audacia imprudente. Olvidando las sabias palabras de su padre, comenzó a ascender cada vez más alto, buscando la cercanía del radiante astro. La cera que unía las plumas comenzó a ablandarse y a gotear. En cuestión de minutos, las alas se desintegraron y el joven se desplomó en el abismo, ahogándose en las profundidades del mar que hoy lleva su nombre: el mar Icario.</p>`
+            },
+            {
+                id: 'lectura-oceanos',
+                titulo: "La Acidificación de los Océanos y el Equilibrio Químico",
+                texto: `<p>Los océanos cubren más del 70% de la superficie terrestre y desempeñan un rol crítico como sumideros globales de carbono, absorbiendo aproximadamente una tercera parte de las emisiones de dióxido de carbono ($CO_2$) generadas por actividades humanas e industriales. Si bien este fenómeno mitiga el calentamiento de la atmósfera, introduce una alteración severa y silenciosa en el equilibrio químico del agua de mar.</p>
+                <p>Cuando el $CO_2$ gaseoso se disuelve en el océano, reacciona de inmediato con las moléculas de agua ($H_2O$) para formar <strong>ácido carbónico ($H_2CO_3$)</strong>, un ácido débil pero capaz de liberar iones de hidrógeno ($H^+$) al disociarse. La acumulación progresiva de estos iones libres de hidrógeno eleva la acidez marina, lo que se traduce en una reducción del potencial de hidrógeno (pH) del océano. Desde la Revolución Industrial, el pH promedio de la superficie marina ha disminuido de 8.2 a 8.1 unidades, lo que representa un alarmante aumento del 30% en la concentración de acidez.</p>
+                <p>Las implicaciones biológicas de esta transformación son devastadoras para los organismos calcificadores, como corales, moluscos y crustáceos. Los iones $H^+$ libres reaccionan rápidamente con los iones de carbonato ($CO_3^{2-}$), formando bicarbonato. Como resultado, la disponibilidad de carbonato disminuye drásticamente. Al carecer de suficientes iones de carbonato libres, estos seres vivos no pueden sintetizar el carbonato de calcio ($CaCO_3$) indispensable para estructurar sus conchas y arrecifes. En condiciones de extrema acidez, las conchas existentes no solo detienen su crecimiento, sino que comienzan a disolverse literalmente en el agua, amenazando la base alimenticia y la biodiversidad marina mundial.</p>`
+            }
+        ];
+
+        // Generator functions for each domain
+        const GENERATORS = {
+            'Pensamiento Matemático': [
+                // 1. Ecuación Lineal ax + b = cx + d
+                () => {
+                    let a = Math.floor(Math.random() * 8) + 2; // [2, 9]
+                    let c = Math.floor(Math.random() * 5) - 6; // [-6, -2] (保证 a != c)
+                    let x = Math.floor(Math.random() * 15) - 7; // [-7, 7] (evitar x=0)
+                    if (x === 0) x = 3;
+                    let b = Math.floor(Math.random() * 20) - 10;
+                    let d = (a - c) * x + b;
+                    
+                    let name = SPANISH_NAMES[Math.floor(Math.random() * SPANISH_NAMES.length)];
+                    return {
+                        subtopic: "Ecuaciones Lineales",
+                        pregunta: `Para resolver un problema de distribución de materiales, ${name} plantea la siguiente ecuación lineal: <span class="font-mono bg-slate-100 dark:bg-slate-900 px-2 py-0.5 rounded">${a}x + (${b}) = ${c}x + (${d})</span>. ¿Cuál es el valor exacto de x?`,
+                        opciones: [
+                            `x = ${x}`,
+                            `x = ${x + Math.floor(Math.random() * 4) + 1}`,
+                            `x = ${x - Math.floor(Math.random() * 4) - 1}`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Agrupando términos semejantes: ${a}x - (${c}x) = ${d} - (${b}) <br> (${a - c})x = ${d - b} <br> x = ${d - b} / ${a - c} = ${x}.`
+                    };
+                },
+                // 2. Pitágoras: Calcular Hipotenusa
+                () => {
+                    let triple = PYTHAGOREAN_TRIPLES[Math.floor(Math.random() * PYTHAGOREAN_TRIPLES.length)];
+                    let k = Math.floor(Math.random() * 4) + 1; // [1, 4]
+                    let a = triple[0] * k;
+                    let b = triple[1] * k;
+                    let c = triple[2] * k;
+                    
+                    let name = SPANISH_NAMES[Math.floor(Math.random() * SPANISH_NAMES.length)];
+                    return {
+                        subtopic: "Teorema de Pitágoras",
+                        pregunta: `Un albañil llamado ${name} construye una base triangular para una rampa. Si los catetos que forman el ángulo recto miden ${a} cm y ${b} cm respectivamente, ¿cuántos centímetros debe medir la hipotenusa?`,
+                        opciones: [
+                            `${c} cm`,
+                            `${a + b} cm`,
+                            `${Math.round(c * 1.2)} cm`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Por el Teorema de Pitágoras, la hipotenusa es c = √(a² + b²). <br> En este caso: c = √(${a}² + ${b}²) = √(${a*a} + ${b*b}) = √(${a*a + b*b}) = ${c} cm.`
+                    };
+                },
+                // 3. Pitágoras: Calcular Cateto
+                () => {
+                    let triple = PYTHAGOREAN_TRIPLES[Math.floor(Math.random() * PYTHAGOREAN_TRIPLES.length)];
+                    let k = Math.floor(Math.random() * 3) + 1;
+                    let a = triple[0] * k;
+                    let b = triple[1] * k;
+                    let c = triple[2] * k;
+                    
+                    return {
+                        subtopic: "Teorema de Pitágoras",
+                        pregunta: `Una escalera de longitud ${c} metros se apoya contra una pared vertical de un edificio. Si la base de la escalera se sitúa a una distancia de ${a} metros del pie de la pared, ¿a qué altura en metros sobre la pared llega el extremo superior de la escalera?`,
+                        opciones: [
+                            `${b} metros`,
+                            `${c - a} metros`,
+                            `${Math.round(b * 0.8)} metros`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Usamos la fórmula despejada del Teorema de Pitágoras para un cateto: b = √(c² - a²). <br> Sustituyendo valores: b = √(${c}² - ${a}²) = √(${c*c} - ${a*a}) = √(${c*c - a*a}) = ${b} metros.`
+                    };
+                },
+                // 4. Productos Notables (Binomio al Cuadrado)
+                () => {
+                    let a = Math.floor(Math.random() * 4) + 2; // [2, 5]
+                    let b = Math.floor(Math.random() * 6) + 2; // [2, 7]
+                    
+                    let term1 = a*a;
+                    let term2 = 2*a*b;
+                    let term3 = b*b;
+
+                    return {
+                        subtopic: "Productos Notables",
+                        pregunta: `Desarrolla el siguiente binomio al cuadrado: <span class="font-mono bg-slate-100 dark:bg-slate-900 px-2 py-0.5 rounded">(${a}x + ${b})²</span>. ¿Cuál es la expresión algebraica resultante?`,
+                        opciones: [
+                            `<span class="font-mono">${term1}x² + ${term2}x + ${term3}</span>`,
+                            `<span class="font-mono">${term1}x² + ${term3}</span>`,
+                            `<span class="font-mono">${term1}x² + ${a*b}x + ${term3}</span>`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `La regla del binomio al cuadrado dice: (u + v)² = u² + 2uv + v². <br> Aplicándolo: (${a}x)² + 2(${a}x)(${b}) + (${b})² = ${term1}x² + ${term2}x + ${term3}.`
+                    };
+                },
+                // 5. Productos Notables (Diferencia de Cuadrados)
+                () => {
+                    let a = Math.floor(Math.random() * 4) + 2; // [2, 5]
+                    let b = Math.floor(Math.random() * 8) + 2; // [2, 9]
+                    
+                    let term1 = a*a;
+                    let term2 = b*b;
+
+                    return {
+                        subtopic: "Productos Notables",
+                        pregunta: `Factoriza la siguiente expresión algebraica correspondiente a una diferencia de cuadrados: <span class="font-mono bg-slate-100 dark:bg-slate-900 px-2 py-0.5 rounded">${term1}x² - ${term2}</span>.`,
+                        opciones: [
+                            `<span class="font-mono">(${a}x + ${b})(${a}x - ${b})</span>`,
+                            `<span class="font-mono">(${a}x - ${b})²</span>`,
+                            `<span class="font-mono">(${term1}x - ${term2})(x + 1)</span>`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Una diferencia de cuadrados u² - v² se factoriza como binomios conjugados: (u + v)(u - v). <br> Aquí, u = √(${term1}x²) = ${a}x, y v = √(${term2}) = ${b}. Por tanto, es (${a}x + ${b})(${a}x - ${b}).`
+                    };
+                },
+                // 6. Sistemas de Ecuaciones (Cabezas y Patas)
+                () => {
+                    let chickens = Math.floor(Math.random() * 15) + 10; // [10, 24]
+                    let rabbits = Math.floor(Math.random() * 12) + 8; // [8, 19]
+                    
+                    let heads = chickens + rabbits;
+                    let legs = (chickens * 2) + (rabbits * 4);
+
+                    return {
+                        subtopic: "Sistemas de Ecuaciones",
+                        pregunta: `En un rancho escolar hay conejos y gallinas. Si se cuentan en total ${heads} cabezas y ${legs} patas en el corral, ¿cuántas gallinas y conejos hay respectivamente?`,
+                        opciones: [
+                            `Gallinas: ${chickens}, Conejos: ${rabbits}`,
+                            `Gallinas: ${rabbits}, Conejos: ${chickens}`,
+                            `Gallinas: ${chickens - 3}, Conejos: ${rabbits + 3}`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Planteando el sistema de ecuaciones: <br> x + y = ${heads} (cabezas) <br> 2x + 4y = ${legs} (patas). <br> Multiplicando la primera por -2 y sumando a la segunda: 2y = ${legs - 2*heads} \\Rightarrow y = conejos = ${rabbits}. Sustituyendo en la primera, x = gallinas = ${chickens}.`
+                    };
+                },
+                // 7. Regla de Tres Inversa
+                () => {
+                    let A = Math.floor(Math.random() * 6) + 4; // [4, 9] pintores
+                    let B = Math.floor(Math.random() * 4) + 3; // [3, 6] días
+                    let product = A * B;
+                    let possibleC = [];
+                    for(let i=2; i <= product; i++) {
+                        if(product % i === 0 && i !== A) possibleC.push(i);
+                    }
+                    if(possibleC.length === 0) possibleC = [A + 2];
+                    let C = possibleC[Math.floor(Math.random() * possibleC.length)];
+                    let D = product / C;
+
+                    return {
+                        subtopic: "Regla de Tres",
+                        pregunta: `Si ${A} obreros construyen una cerca de protección en ${B} días, ¿cuántos días tardarán ${C} obreros en realizar la misma obra trabajando al mismo ritmo de construcción?`,
+                        opciones: [
+                            `${D.toFixed(1)} días`,
+                            `${(product/C + 2).toFixed(1)} días`,
+                            `${(A * C / B).toFixed(1)} días`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Es un problema de proporcionalidad inversa: a más obreros, menos días tardarán. Se calcula multiplicando los valores iniciales y dividiendo entre el nuevo número de obreros: <br> (obreros iniciales · días iniciales) / nuevos obreros = (${A} · ${B}) / ${C} = ${D} días.`
+                    };
+                },
+                // 8. Cálculo de Porcentaje
+                () => {
+                    let originalPrice = (Math.floor(Math.random() * 8) + 4) * 150;
+                    let discountPercent = Math.floor(Math.random() * 4 + 2) * 10;
+                    let savedMoney = originalPrice * (discountPercent / 100);
+                    let finalPrice = originalPrice - savedMoney;
+                    
+                    let object = MATH_OBJECTS[Math.floor(Math.random() * MATH_OBJECTS.length)];
+                    return {
+                        subtopic: "Porcentajes",
+                        pregunta: `Un lote de ${object} escolares tiene un valor comercial de \$${originalPrice} pesos. Si un proveedor ofrece un descuento especial del ${discountPercent}%, ¿cuál será el costo final que deberá pagarse por el lote?`,
+                        opciones: [
+                            `\$${finalPrice} pesos`,
+                            `\$${originalPrice - savedMoney / 2} pesos`,
+                            `\$${finalPrice - 50} pesos`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `El descuento representa el ${discountPercent}% de \$${originalPrice}, que equivale a \$${savedMoney} pesos. <br> Restando esto del precio original: \$${originalPrice} - \$${savedMoney} = \$${finalPrice} pesos.`
+                    };
+                },
+                // 9. Sucesiones Aritméticas
+                () => {
+                    let start = Math.floor(Math.random() * 10) + 1;
+                    let diff = Math.floor(Math.random() * 5) + 3;
+                    let n = Math.floor(Math.random() * 5) + 10;
+                    let termN = start + (n - 1) * diff;
+
+                    return {
+                        subtopic: "Sucesiones",
+                        pregunta: `Dada la siguiente progresión o sucesión aritmética: <span class="font-mono bg-slate-100 dark:bg-slate-900 px-2 py-0.5 rounded">${start}, ${start + diff}, ${start + 2*diff}, ${start + 3*diff}, ...</span> ¿Cuál es el término en la posición número ${n}?`,
+                        opciones: [
+                            `${termN}`,
+                            `${termN + diff}`,
+                            `${termN - 2}`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `La fórmula del término general de una sucesión aritmética es a_n = a_1 + (n - 1)d. <br> Para esta sucesión: a_${n} = ${start} + (${n} - 1) · ${diff} = ${start} + ${n-1} · ${diff} = ${termN}.`
+                    };
+                },
+                // 10. Área Compuesta
+                () => {
+                    let w = Math.floor(Math.random() * 6) + 10;
+                    let h = Math.floor(Math.random() * 4) + 6;
+                    let s = Math.floor(Math.random() * 2) + 2;
+                    let totalArea = w * h;
+                    let squareArea = s * s;
+                    let finalArea = totalArea - squareArea;
+
+                    return {
+                        subtopic: "Áreas y Perímetros",
+                        pregunta: `Una placa metálica de forma rectangular mide ${w} cm de largo y ${h} cm de ancho. Si un técnico le realiza un corte de forma cuadrada de ${s} cm de lado en una de sus esquinas, ¿cuál es el área superficial resultante de la placa en cm²?`,
+                        opciones: [
+                            `${finalArea} cm²`,
+                            `${totalArea - s} cm²`,
+                            `${finalArea - 10} cm²`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Calculamos primero el área total del rectángulo: A_rec = ${w} · ${h} = ${totalArea} cm². <br> El área del cuadrado sustraído es A_sq = ${s} · ${s} = ${squareArea} cm². <br> El área final es la diferencia: ${totalArea} - ${squareArea} = ${finalArea} cm².`
+                    };
+                }
+            ],
+            'Pensamiento Científico': [
+                // 1. Cinemática v = d/t
+                () => {
+                    let velocity = Math.floor(Math.random() * 15) + 10;
+                    let seconds = Math.floor(Math.random() * 8) + 10;
+                    let distance = velocity * seconds;
+
+                    return {
+                        subtopic: "Cinemática",
+                        pregunta: `Un dispositivo autónomo móvil se desplaza en línea recta sobre una pista de laboratorio a una velocidad constante de ${velocity} m/s. ¿Qué distancia en metros recorrerá tras transcurrir un lapso de ${seconds} segundos?`,
+                        opciones: [
+                            `${distance} metros`,
+                            `${(velocity + seconds).toFixed(1)} metros`,
+                            `${(distance / 2).toFixed(1)} metros`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `En un movimiento rectilíneo uniforme (MRU), la distancia se calcula multiplicando la velocidad por el tiempo de viaje: d = v · t = ${velocity} m/s · ${seconds} s = ${distance} metros.`
+                    };
+                },
+                // 2. Fuerza y Aceleración F = ma
+                () => {
+                    let mass = Math.floor(Math.random() * 15) + 5;
+                    let accel = Math.floor(Math.random() * 5) + 2;
+                    let force = mass * accel;
+
+                    return {
+                        subtopic: "Fuerza y Aceleración",
+                        pregunta: `Se aplica una fuerza neta constante de ${force} Newtons sobre un bloque que descansa sobre una mesa sin fricción. Si se mide que el bloque acelera a ${accel} m/s², ¿cuál es la masa en kilogramos de dicho bloque?`,
+                        opciones: [
+                            `${mass} kg`,
+                            `${(force * accel).toFixed(1)} kg`,
+                            `${(force - accel).toFixed(1)} kg`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Aplicando la Segunda Ley de Newton, F = m · a. Despejando la masa: m = F / a. <br> Reemplazando los datos: m = ${force} N / ${accel} m/s² = ${mass} kg.`
+                    };
+                },
+                // 3. Mitocondria Organelo
+                () => {
+                    return {
+                        subtopic: "Organelos Celulares",
+                        pregunta: `Durante una observación microscópica de células musculares, un estudiante detecta abundantes organelos de doble membrana dedicados a la síntesis de moléculas de ATP mediante la respiración aeróbica. ¿De qué organelo se trata?`,
+                        opciones: [
+                            `Mitocondria`,
+                            `Cloroplasto`,
+                            `Aparato de Golgi`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Las mitocondrias son los organelos encargados de la respiración celular aerobia para obtener energía en forma de ATP metabólico.`
+                    };
+                },
+                // 4. Enlace Iónico
+                () => {
+                    const metals = ["Sodio (Na)", "Potasio (K)", "Calcio (Ca)"];
+                    const nonmetals = ["Cloro (Cl)", "Flúor (F)", "Bromo (Br)"];
+                    let m = metals[Math.floor(Math.random() * metals.length)];
+                    let nm = nonmetals[Math.floor(Math.random() * nonmetals.length)];
+
+                    return {
+                        subtopic: "Enlaces Químicos",
+                        pregunta: `¿Qué tipo de enlace químico se establece cuando un átomo de carácter metálico como el ${m} transfiere por completo electrones de valencia a un átomo altamente electronegativo como el ${nm}?`,
+                        opciones: [
+                            `Enlace iónico`,
+                            `Enlace covalente`,
+                            `Enlace metálico`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `La transferencia de electrones entre un metal (que cede electrones) y un no metal (que los recibe) genera iones de carga opuesta que se atraen electrostáticamente, formando un enlace iónico.`
+                    };
+                },
+                // 5. Enlace Covalente
+                () => {
+                    return {
+                        subtopic: "Enlaces Químicos",
+                        pregunta: `La molécula del dióxido de carbono ($CO_2$) está formada por átomos de carbono y oxígeno que comparten electrones para adquirir la configuración estable de gas noble. Este enlace se clasifica como:`,
+                        opciones: [
+                            `Enlace covalente`,
+                            `Enlace iónico`,
+                            `Enlace metálico`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `El enlace covalente se produce por el compartimiento de electrones entre dos elementos no metálicos para completar su capa de valencia.`
+                    };
+                },
+                // 6. Gases Nobles
+                () => {
+                    const gases = ["Helio (He)", "Neón (Ne)", "Argón (Ar)", "Kriptón (Kr)"];
+                    let g = gases[Math.floor(Math.random() * gases.length)];
+
+                    return {
+                        subtopic: "Tabla Periódica",
+                        pregunta: `El elemento químico ${g} se encuentra en el extremo derecho de la tabla periódica. ¿A qué grupo o familia pertenece debido a su nula reactividad química bajo condiciones normales?`,
+                        opciones: [
+                            `Gases nobles`,
+                            `Metales alcalinos`,
+                            `Halógenos`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Los gases nobles (grupo 18 o VIII A) tienen su última órbita de electrones saturada (octeto completo), lo que les otorga una enorme estabilidad y baja reactividad.`
+                    };
+                },
+                // 7. Cambios de Estado
+                () => {
+                    return {
+                        subtopic: "Cambios de Estado",
+                        pregunta: `Al colocar hielo seco (dióxido de carbono sólido) a temperatura ambiente, este se evapora rápidamente directamente al estado gaseoso sin pasar por el estado de agregación líquido. ¿Cómo se conoce a este cambio físico?`,
+                        opciones: [
+                            `Sublimación directa`,
+                            `Fusión`,
+                            `Condensación`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `La sublimación directa (o sublimación) es la transición directa del estado sólido al gaseoso sin transitar por el estado de agregación líquido.`
+                    };
+                },
+                // 8. División Celular
+                () => {
+                    return {
+                        subtopic: "División Celular",
+                        pregunta: `¿En qué etapa de la mitosis de la célula eucariota ocurre la separación y migración de las cromátidas hermanas hacia los polos opuestos de la célula mediante el huso mitótico?`,
+                        opciones: [
+                            `Anafase`,
+                            `Metafase`,
+                            `Profase`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `La anafase es la fase de la mitosis donde los microtúbulos tiran de las cromátidas hermanas, dividiéndolas y moviéndolas hacia extremos celulares contrarios.`
+                    };
+                }
+            ],
+            'Redacción Indirecta': [
+                // 1. Concordancia
+                () => {
+                    return {
+                        subtopic: "Concordancia Gramatical",
+                        pregunta: `Selecciona el enunciado que exhibe una concordancia gramatical (sujeto-verbo o género-número) correcta de acuerdo con la norma académica:`,
+                        opciones: [
+                            `La manada de lobos hambrientos aulló a lo lejos durante la fría noche de invierno.`,
+                            `La manada de lobos hambrientos aullaron a lo lejos durante la fría noche de invierno.`,
+                            `La manada de lobos hambrientos aullando a lo lejos durante la fría noche de invierno.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `El sujeto es un sustantivo colectivo singular ('la manada'). Aunque esté modificado por un complemento plural ('de lobos'), el verbo principal debe concordar en singular con el núcleo del sujeto ('aulló').`
+                    };
+                },
+                // 2. Diéresis
+                () => {
+                    return {
+                        subtopic: "Acentuación",
+                        pregunta: `Elige la palabra que requiere el uso obligatorio de la diéresis (¨) sobre la vocal 'u' para indicar que esta debe pronunciarse sonoramente:`,
+                        opciones: [
+                            `Antigüedad`,
+                            `Hoguera`,
+                            `Guerrero`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `La diéresis se coloca sobre la 'u' en las sílabas 'güe' y 'güi' para indicar sonido en dicha vocal. En 'hoguera' y 'guerrero', la 'u' es muda y solo sirve para suavizar la 'g'.`
+                    };
+                },
+                // 3. Palabra Esdrújula
+                () => {
+                    return {
+                        subtopic: "Acentuación",
+                        pregunta: `Identifica la opción que presenta una palabra que cumple con las reglas ortográficas de las palabras esdrújulas (cuya sílaba tónica es la antepenúltima):`,
+                        opciones: [
+                            `Teléfono`,
+                            `Canción`,
+                            `Azúcar`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `La palabra 'teléfono' lleva la sílaba tónica en la antepenúltima posición (te-lé-fo-no) y, al ser esdrújula, siempre debe llevar tilde ortográfica. 'Canción' es aguda y 'azúcar' es grave.`
+                    };
+                },
+                // 4. Grafías B/V
+                () => {
+                    return {
+                        subtopic: "Uso de Grafías",
+                        pregunta: `Completa de forma ortográficamente correcta el siguiente fragmento: «El director del zoológico ___ que tomar medidas estrictas porque no ___ más especies en esa zona.»`,
+                        opciones: [
+                            `tuvo - cabían`,
+                            `tubo - cabían`,
+                            `tuvo - cavían`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `'Tuvo' proviene del verbo tener (con v), mientras que 'cabían' es conjugación del verbo caber (con b).`
+                    };
+                },
+                // 5. Impersonal Haber
+                () => {
+                    return {
+                        subtopic: "Concordancia Gramatical",
+                        pregunta: `Selecciona la oración redactada de forma correcta según el uso formal e impersonal del verbo 'haber' en español:`,
+                        opciones: [
+                            `Había muchos reportes de incidentes en la oficina central.`,
+                            `Habían muchos reportes de incidentes en la oficina central.`,
+                            `Hubieron muchos reportes de incidentes en la oficina central.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Cuando el verbo 'haber' funciona como impersonal (indicando existencia), se conjuga exclusivamente en tercera persona del singular ('había', 'hubo'), sin importar que el objeto directo sea plural.`
+                    };
+                },
+                // 6. Redundancias
+                () => {
+                    return {
+                        subtopic: "Redundancia",
+                        pregunta: `Identifica cuál de las siguientes opciones carece de redundancias semánticas o pleonasmos innecesarios, manteniendo una redacción limpia y coherentemente estructurada:`,
+                        opciones: [
+                            `El testigo declaró los pormenores del suceso ante el tribunal.`,
+                            `El testigo declaró los pormenores del suceso con su propia boca ante el tribunal.`,
+                            `El testigo declaró los pormenores del suceso subiendo para arriba ante el tribunal.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Las frases 'con su propia boca' y 'subiendo para arriba' son redundantes ya que el acto de declarar implica usar la boca y subir implica moverse hacia arriba. La primera opción expresa la idea de forma clara y directa.`
+                    };
+                }
+            ],
+            'Comprensión Lectora': [
+                // Programmed dynamically from LECTURAS
+            ],
+            'Inglés': [
+                // 1. Simple Past
+                () => {
+                    return {
+                        subtopic: "Past Simple",
+                        pregunta: `Choose the option that correctly completes the following sentence in Past Simple: «Yesterday afternoon, Marcus __________ (lose) his wallet while jogging in the central park.»`,
+                        opciones: [
+                            `lost`,
+                            `loses`,
+                            `has lost`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `The sentence refers to a finished action in the past ('yesterday afternoon'), which requires the simple past form of the irregular verb 'lose', which is 'lost'.`
+                    };
+                },
+                // 2. Present Perfect (For vs Since)
+                () => {
+                    return {
+                        subtopic: "Present Perfect",
+                        pregunta: `Select the word that correctly completes the statement: «Diana and Robert have been studying English in this academic institution __________ three years.»`,
+                        opciones: [
+                            `for`,
+                            `since`,
+                            `during`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `'For' is used to define a duration of time (a period: 'three years'). 'Since' is used to define a specific starting point in time.`
+                    };
+                },
+                // 3. First Conditional
+                () => {
+                    return {
+                        subtopic: "First Conditional",
+                        pregunta: `Choose the correct verbal structure for the conditional sentence: «If you __________ (study) these materials carefully, you __________ (obtain) a high score on the test.»`,
+                        opciones: [
+                            `study / will obtain`,
+                            `studied / would obtain`,
+                            `will study / obtain`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `The First Conditional structure consists of: If + Present Simple (study), followed by Future Simple (will obtain).`
+                    };
+                },
+                // 4. Modals
+                () => {
+                    return {
+                        subtopic: "Modals",
+                        pregunta: `Complete the sentence: «According to the official regulation, all candidates __________ bring their physical identification cards to enter. No exceptions are allowed.»`,
+                        opciones: [
+                            `must`,
+                            `might`,
+                            `could`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `'Must' expresses a strong obligation or regulation. 'Might' and 'could' indicate possibility or permission, which are incorrect in a strict rule context.`
+                    };
+                },
+                // 5. Comparative
+                () => {
+                    return {
+                        subtopic: "Comparatives",
+                        pregunta: `Identify the option that correctly establishes the comparative adjective: «The metropolitan library is far __________ (interesting) than the community center nearby.»`,
+                        opciones: [
+                            `more interesting`,
+                            `interestinger`,
+                            `most interesting`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `For long adjectives (three or more syllables), the comparative degree is constructed by placing 'more' before the adjective: 'more interesting'.`
+                    };
+                }
+            ]
+        };
+
+        // Pre-build dynamic generator questions matching template configurations
+        function generateLocalBank(mode) {
+            let bank = [];
+            const domains = ['Pensamiento Matemático', 'Pensamiento Científico', 'Redacción Indirecta', 'Comprensión Lectora', 'Inglés'];
+            
+            let countPerDomain = (mode === 'diagnostic') ? 6 : 32;
+
+            domains.forEach(domain => {
+                if (domain === 'Comprensión Lectora') {
+                    for (let i = 0; i < countPerDomain; i++) {
+                        let passageIndex = Math.floor(i / 6) % LECTURAS.length;
+                        let passage = LECTURAS[passageIndex];
+                        let q = generateReadingQuestion(passage, i);
+                        bank.push(q);
+                    }
+                } else {
+                    let gens = GENERATORS[domain];
+                    for (let i = 0; i < countPerDomain; i++) {
+                        let gen = gens[i % gens.length];
+                        let q = gen();
+                        q.category = domain;
+                        q.id = `${domain.toLowerCase().replace(/ /g, '-')}-${i}`;
+                        q.has_lectura = false;
+                        q.original_index = bank.length;
+                        bank.push(q);
+                    }
+                }
+            });
+
+            fisherYatesShuffle(bank);
+            return bank;
+        }
+
+        // Reading questions generator
+        function generateReadingQuestion(passage, idx) {
+            let questionsPool = [];
+            
+            if (passage.id === 'lectura-sars') {
+                questionsPool = [
+                    {
+                        pregunta: `De acuerdo con la lectura del texto científico, ¿cuál es el papel fundamental que desempeña la proteína Spike (S) en el ciclo vital de la infección celular del virus SARS-CoV-2?`,
+                        opciones: [
+                            `Acoplarse molecularmente al receptor celular humano ACE2 para facilitar la fusión de membranas e inyectar el material viral.`,
+                            `Disolver mecánicamente la envoltura lipídica celular humana y lisar de inmediato los tejidos alveolares.`,
+                            `Secuestrar el aparato ribosómico hospedero de manera independiente para sintetizar proteínas accesorias.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `El texto señala explícitamente: «Estas espículas tienen una afinidad específica por el receptor celular humano ACE2... Al acoplarse con el receptor ACE2, la membrana del virus se fusiona con la celular, inyectando su ARN...»`
+                    },
+                    {
+                        pregunta: `A partir del texto sobre inmunología, se puede deducir que la respuesta inmunitaria citotóxica (linfocitos T CD8+) se orienta primordialmente a:`,
+                        opciones: [
+                            `Identificar y destruir físicamente aquellas células propias que ya han sido colonizadas por el virus.`,
+                            `Estimular a los linfocitos B para que secreten grandes volúmenes de inmunoglobulinas IgG y IgM neutralizantes.`,
+                            `Desencadenar la tormenta de citoquinas inflamatorias para proteger la función de los alvéolos pulmonares.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `El tercer párrafo detalla: «Simultáneamente, los linfocitos T citotóxicos (CD8+) identifican y destruyen las células corporales que han sido colonizadas por el patógeno...»`
+                    },
+                    {
+                        pregunta: `¿Qué sentido contextual adquiere el verbo <strong>atenuar</strong> utilizado en el desenlace del último párrafo del texto?`,
+                        opciones: [
+                            `Disminuir, mermar o debilitar el funcionamiento fisiológico normal de los pulmones.`,
+                            `Eliminar de raíz la capacidad infectiva de los viriones adyacentes.`,
+                            `Robustecer o incentivar la respuesta defensiva del tejido respiratorio.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `En el contexto clínico del texto, la tormenta de citoquinas causa un daño tisular que puede mermar o debilitar (atenuar) el correcto intercambio de gases de la función respiratoria.`
+                    }
+                ];
+            } else if (passage.id === 'lectura-icaro') {
+                questionsPool = [
+                    {
+                        pregunta: `¿Cuál constituye la advertencia principal que Dédalo le hace a su hijo Ícaro previo a emprender la huida aérea desde Creta?`,
+                        opciones: [
+                            `Volar por un rumbo intermedio, evitando la humedad marítima y la proximidad extrema al calor del sol.`,
+                            `Ascender lo más alto posible para evitar que el rey Minos los alcanzara con flechas de fuego.`,
+                            `Volar pegado a la superficie del mar para aprovechar las corrientes y camuflarse del enemigo.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Dédalo le aconseja explícitamente: «no debes volar demasiado bajo, pues la humedad del mar pesará en tus plumas... ni debes volar demasiado alto, porque el intenso calor del sol derretirá la cera... Mantén el rumbo intermedio».`
+                    },
+                    {
+                        pregunta: `La caída de Ícaro al vacío en el desenlace del mito puede atribuirse a:`,
+                        opciones: [
+                            `Su desobediencia e imprudencia al dejarse llevar por la exaltación del vuelo e intentar acercarse al sol.`,
+                            `La mala calidad del hilo y la cera que Dédalo utilizó en la confección artesanal de las alas.`,
+                            `Una ráfaga de viento repentina sobre el mar Icario que rompió el timón del ala izquierda.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `El texto describe que Ícaro sintió una «imprudente audacia» y, «olvidando las sabias palabras de su padre, comenzó a ascender cada vez más alto», causando que el sol derritiese la cera de unión.`
+                    },
+                    {
+                        pregunta: `A partir del comportamiento lúdico de Ícaro mientras Dédalo trabajaba, se puede inferir que:`,
+                        opciones: [
+                            `No comprendía plenamente el peligro ni la trascendencia del escape que preparaba su padre.`,
+                            `Intentaba boicotear el invento de su padre debido a su descontento por abandonar Creta.`,
+                            `Tenía grandes conocimientos en mecánica de fluidos y ayudaba a calibrar la curvatura de las plumas.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `El texto explica que Ícaro «jugueteaba travieso con las plumas... ignorando el peligro latente de la osada empresa», revelando su falta de conciencia sobre la gravedad del asunto.`
+                    }
+                ];
+            } else { // acidificacion
+                questionsPool = [
+                    {
+                        pregunta: `¿Qué reacción química inmediata desencadena la disolución del dióxido de carbono humano ($CO_2$) en las aguas marinas?`,
+                        opciones: [
+                            `La formación de ácido carbónico ($H_2CO_3$), incrementando la concentración de iones libres de hidrógeno e incrementando la acidez.`,
+                            `El secuestro de conchas calcáreas por parte de iones carbonato para estabilizar la disociación molecular.`,
+                            `La deacidificación absoluta de la acidez marina y la estabilización de pH en 8.2 unidades.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `El segundo párrafo detalla: «Cuando el CO2 gaseoso se disuelve... reacciona de inmediato con las moléculas de agua para formar ácido carbónico ($H_2CO_3$)... liberando iones de hidrógeno... eleva la acidez marina.»`
+                    },
+                    {
+                        pregunta: `De acuerdo con el texto científico, ¿cuál es la consecuencia directa de la menor disponibilidad de iones de carbonato ($CO_3^{2-}$) libres en el agua?`,
+                        opciones: [
+                            `Los organismos calcificadores carecen de materia prima para construir sus conchas y esqueletos de carbonato de calcio.`,
+                            `Se reduce de manera acelerada el pH marino, llevándolo por debajo del nivel de acidez crítica de 8.1.`,
+                            `Se incrementa exponencialmente el crecimiento de corales debido al exceso de bicarbonato disponible.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `Se detalla que los iones libres de hidrógeno se asocian con el carbonato formando bicarbonato, reduciendo el carbonato disponible para sintetizar el carbonato de calcio ($CaCO_3$) de las conchas.`
+                    },
+                    {
+                        pregunta: `A partir del texto, se deduce que la Revolución Industrial ha impactado la química de los océanos a través de:`,
+                        opciones: [
+                            `La emisión a gran escala de gases de combustión que aumentan la disolución del carbono gaseoso en el agua.`,
+                            `El vertido directo de ácidos corrosivos sintéticos sobre los arrecifes del coral costero.`,
+                            `La reducción artificial del porcentaje de agua superficial del planeta por canalizaciones industriales.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `El texto liga el aumento de dióxido de carbono atmosférico y la subsecuente acidificación marina a las emisiones de carbono originadas «por actividades humanas e industriales» a partir de la era industrial.`
+                    }
+                ];
+            }
+
+            let qItem = questionsPool[idx % questionsPool.length];
+            return {
+                category: 'Comprensión Lectora',
+                subtopic: `Texto: ${passage.titulo}`,
+                pregunta: qItem.pregunta,
+                opciones: [...qItem.opciones],
+                correcta_index: qItem.correcta_index,
+                explicacion: qItem.explicacion,
+                has_lectura: true,
+                lectura_id: passage.id,
+                id: `comprension-${idx}`
+            };
+        }
+
+        // Shuffles array using Fisher-Yates and updates references
+        function fisherYatesShuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Shuffles response choices while preserving grade integrity
+        function shuffleOptions(question) {
+            let opts = question.opciones.map((val, idx) => ({ val, isCorrect: idx === question.correcta_index }));
+            fisherYatesShuffle(opts);
+            question.opciones = opts.map(o => o.val);
+            question.correcta_index = opts.findIndex(o => o.isCorrect);
+        }
+
+        // ==================== APP CONTROL LOGIC ====================
+
+        window.onload = function() {
+            loadStatsBanner();
+            initScratchpad();
+            loadGeminiConfig();
+        };
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        function loadStatsBanner() {
+            let lastScore = localStorage.getItem('last_exam_score');
+            let lastType = localStorage.getItem('last_exam_type');
+            let lastDate = localStorage.getItem('last_exam_date');
+
+            if (lastScore !== null) {
+                document.getElementById('stats-banner').classList.remove('hidden');
+                document.getElementById('last-exam-score').innerText = `${lastScore}%`;
+                document.getElementById('last-exam-type').innerText = lastType === 'diagnostic' ? 'Diagnóstico' : lastType === 'full' ? 'Completo CENEVAL' : 'Remedial';
+                document.getElementById('last-exam-date').innerText = lastDate;
+            }
+        }
+
+        // Start exam session
+        function startExam(mode) {
+            currentExamMode = mode;
+            examQuestions = generateLocalBank(mode);
+            
+            examQuestions.forEach(q => shuffleOptions(q));
+
+            currentQuestionIndex = 0;
+            userAnswers = {};
+            reviewList.clear();
+
+            let duration = (mode === 'diagnostic') ? 45 * 60 : 180 * 60; // seconds
+            examTimeRemaining = duration;
+            examStartTime = duration;
+            startTimer();
+
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            document.getElementById('header-exam-status').classList.remove('hidden');
+
+            renderQuestion();
+            buildQuestionMapGrid();
+        }
+
+        function startTimer() {
+            if (examTimer) clearInterval(examTimer);
+            examTimer = setInterval(() => {
+                if (examTimeRemaining <= 0) {
+                    clearInterval(examTimer);
+                    submitExam(true);
+                } else {
+                    examTimeRemaining--;
+                    updateTimerDisplay();
+                }
+            }, 1000);
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            let h = Math.floor(examTimeRemaining / 3600);
+            let m = Math.floor((examTimeRemaining % 3600) / 60);
+            let s = examTimeRemaining % 60;
+            document.getElementById('timer-display').innerText = 
+                `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        // Renders current question
+        function renderQuestion() {
+            if (examQuestions.length === 0) return;
+            const q = examQuestions[currentQuestionIndex];
+
+            document.getElementById('explanation-box').classList.add('hidden');
+
+            document.getElementById('badge-question-domain').innerText = q.category;
+            document.getElementById('badge-question-subtopic').innerHTML = `<i class="fa-solid fa-tags text-indigo-400 mr-1.5"></i>Tema: ${q.subtopic}`;
+
+            document.getElementById('header-progress-text').innerText = `Pregunta ${currentQuestionIndex + 1} de ${examQuestions.length}`;
+            let percent = ((currentQuestionIndex + 1) / examQuestions.length) * 100;
+            document.getElementById('progress-bar-fill').style.width = `${percent}%`;
+
+            const layout = document.getElementById('exam-layout-container');
+            const leftPanel = document.getElementById('reading-passage-panel');
+            const rightPanel = document.getElementById('question-card-panel');
+
+            if (q.has_lectura) {
+                layout.classList.add('lg:grid-cols-2');
+                leftPanel.classList.remove('hidden');
+                
+                let readingData = LECTURAS.find(l => l.id === q.lectura_id);
+                document.getElementById('reading-passage-content').innerHTML = `
+                    <h2 class="text-xl md:text-2xl font-black text-slate-900 dark:text-white leading-tight mb-4">${readingData.titulo}</h2>
+                    ${readingData.texto}
+                `;
+            } else {
+                layout.classList.remove('lg:grid-cols-2');
+                leftPanel.classList.add('hidden');
+            }
+
+            document.getElementById('question-text').innerHTML = q.pregunta;
+
+            const optContainer = document.getElementById('options-container');
+            optContainer.innerHTML = '';
+
+            const optionLetters = ['A', 'B', 'C'];
+            q.opciones.forEach((optText, optIdx) => {
+                let isSelected = userAnswers[currentQuestionIndex] === optIdx;
+                let btn = document.createElement('button');
+                btn.id = `btn-opt-${optIdx}`;
+                btn.className = `w-full text-left p-4 rounded-xl border flex items-center justify-between transition-all duration-200 group text-xs md:text-sm hover:translate-x-1 ${
+                    isSelected 
+                        ? 'bg-indigo-50 border-indigo-500 dark:bg-indigo-950/30 dark:border-indigo-500 text-indigo-700 dark:text-indigo-300 font-semibold ring-2 ring-indigo-500/10' 
+                        : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'
+                }`;
+                btn.onclick = () => selectOption(optIdx);
+
+                btn.innerHTML = `
+                    <span class="flex items-center space-x-3.5">
+                        <span class="w-7 h-7 rounded-lg border font-mono font-bold flex items-center justify-center text-xs shadow-sm transition-all duration-150 ${
+                            isSelected 
+                                ? 'bg-indigo-500 text-white border-indigo-500 ring-2 ring-indigo-500/20' 
+                                : 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-500 group-hover:bg-slate-200 dark:group-hover:bg-slate-800 group-hover:text-slate-700 dark:group-hover:text-slate-300'
+                        }">${optionLetters[optIdx]}</span>
+                        <span class="flex-1 leading-relaxed">${optText}</span>
+                    </span>
+                    <i class="fa-regular ${isSelected ? 'fa-circle-dot text-indigo-500' : 'fa-circle text-slate-300 dark:text-slate-700'} text-sm shrink-0"></i>
+                `;
+                optContainer.appendChild(btn);
+            });
+
+            if (userAnswers[currentQuestionIndex] !== undefined) {
+                showExplanation();
+            }
+
+            if (currentQuestionIndex === examQuestions.length - 1) {
+                document.getElementById('btn-next-text').innerText = "Entregar";
+            } else {
+                document.getElementById('btn-next-text').innerText = "Siguiente";
+            }
+
+            document.getElementById('btn-prev-question').disabled = currentQuestionIndex === 0;
+
+            let isMarked = reviewList.has(currentQuestionIndex);
+            let reviewBtn = document.getElementById('btn-mark-review');
+            let reviewText = document.getElementById('btn-mark-review-text');
+            if (isMarked) {
+                reviewBtn.className = "px-4 py-2.5 bg-amber-500/10 border-amber-500/50 rounded-xl text-xs font-bold text-amber-500 flex items-center space-x-2 active:scale-95 transition-all duration-200";
+                reviewText.innerText = "Marcado";
+            } else {
+                reviewBtn.className = "px-4 py-2.5 border border-slate-200 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-amber-950/20 hover:border-amber-500/40 rounded-xl text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-amber-500 transition-all duration-200 flex items-center space-x-2 active:scale-95";
+                reviewText.innerText = "Marcar Revisión";
+            }
+
+            // Setup AI indicators based on configuration & Key presence
+            let aiBadge = document.getElementById('btn-ai-generate-alt');
+            let explainAiBtn = document.getElementById('btn-ask-gemini-explanation');
+            if (aiModeEnabled && geminiApiKey !== '') {
+                aiBadge.classList.remove('hidden');
+                explainAiBtn.classList.remove('hidden');
+            } else {
+                aiBadge.classList.add('hidden');
+                explainAiBtn.classList.add('hidden');
+            }
+        }
+
+        function adjustReadingFontSize(delta) {
+            readingFontSize = Math.max(12, Math.min(24, readingFontSize + delta));
+            document.getElementById('reading-passage-content').style.fontSize = `${readingFontSize}px`;
+        }
+
+        function selectOption(optIdx) {
+            userAnswers[currentQuestionIndex] = optIdx;
+            renderQuestion();
+            buildQuestionMapGrid();
+        }
+
+        function showExplanation() {
+            const q = examQuestions[currentQuestionIndex];
+            const expBox = document.getElementById('explanation-box');
+            const expText = document.getElementById('explanation-text');
+
+            expBox.classList.remove('hidden');
+            expText.innerHTML = q.explicacion;
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < examQuestions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                submitExam();
+            }
+        }
+
+        function toggleMarkedForReview() {
+            if (reviewList.has(currentQuestionIndex)) {
+                reviewList.delete(currentQuestionIndex);
+            } else {
+                reviewList.add(currentQuestionIndex);
+            }
+            renderQuestion();
+            buildQuestionMapGrid();
+        }
+
+        function toggleQuestionMap() {
+            document.getElementById('question-map-drawer').classList.toggle('hidden');
+        }
+
+        function buildQuestionMapGrid() {
+            const grid = document.getElementById('question-grid');
+            grid.innerHTML = '';
+
+            let answeredCount = 0;
+            examQuestions.forEach((q, idx) => {
+                let isAnswered = userAnswers[idx] !== undefined;
+                let isMarked = reviewList.has(idx);
+                let isCurrent = idx === currentQuestionIndex;
+
+                if (isAnswered) answeredCount++;
+
+                let cell = document.createElement('button');
+                cell.className = `w-10 h-10 rounded-xl font-mono text-xs font-bold transition-all duration-150 active:scale-90 border flex items-center justify-center ${
+                    isCurrent 
+                        ? 'ring-2 ring-indigo-500 border-indigo-500' 
+                        : ''
+                } ${
+                    isMarked
+                        ? 'bg-amber-500 border-amber-500 text-white shadow-sm'
+                        : isAnswered
+                            ? 'bg-indigo-600 border-indigo-600 text-white'
+                            : 'bg-slate-100 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
+                }`;
+                cell.onclick = () => {
+                    currentQuestionIndex = idx;
+                    renderQuestion();
+                };
+                cell.innerText = idx + 1;
+                grid.appendChild(cell);
+            });
+
+            document.getElementById('map-answered-counter').innerText = `${answeredCount} de ${examQuestions.length} Respondidas`;
+        }
+
+        function submitExam(timeout = false) {
+            let totalAnswered = Object.keys(userAnswers).length;
+            if (!timeout && totalAnswered < examQuestions.length) {
+                let confirmed = confirm(`Has respondido ${totalAnswered} de ${examQuestions.length} preguntas. ¿Estás seguro de que deseas enviar tus respuestas y terminar el examen?`);
+                if (!confirmed) return;
+            }
+
+            if (examTimer) clearInterval(examTimer);
+
+            let hits = 0;
+            let misses = 0;
+            let categoryBreakdown = {};
+
+            const domains = ['Pensamiento Matemático', 'Pensamiento Científico', 'Redacción Indirecta', 'Comprensión Lectora', 'Inglés'];
+            domains.forEach(d => categoryBreakdown[d] = { total: 0, correct: 0 });
+
+            let errors = [];
+
+            examQuestions.forEach((q, idx) => {
+                let ans = userAnswers[idx];
+                let isCorrect = ans === q.correcta_index;
+                
+                categoryBreakdown[q.category].total++;
+                if (isCorrect) {
+                    hits++;
+                    categoryBreakdown[q.category].correct++;
+                } else {
+                    misses++;
+                    errors.push({
+                        questionIdx: idx,
+                        question: q,
+                        userSelection: ans !== undefined ? q.opciones[ans] : 'Sin responder',
+                        correctText: q.opciones[q.correcta_index]
+                    });
+                }
+            });
+
+            let finalPercent = Math.round((hits / examQuestions.length) * 100);
+
+            let today = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            localStorage.setItem('last_exam_score', finalPercent);
+            localStorage.setItem('last_exam_type', currentExamMode);
+            localStorage.setItem('last_exam_date', today);
+
+            renderResultsView(finalPercent, hits, misses, categoryBreakdown, errors);
+
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('header-exam-status').classList.add('hidden');
+            document.getElementById('question-map-drawer').classList.add('hidden');
+            document.getElementById('results-screen').classList.remove('hidden');
+        }
+
+        function renderResultsView(percent, hits, misses, breakdown, errors) {
+            let indicator = document.getElementById('results-radial-indicator');
+            let offset = 477 - (477 * percent) / 100;
+            indicator.style.strokeDashoffset = offset;
+            
+            document.getElementById('results-percent-text').innerText = `${percent}%`;
+
+            let badge = document.getElementById('results-status-badge');
+            if (percent >= 70) {
+                badge.innerText = "Aprobado";
+                badge.className = "px-3 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase bg-emerald-500/10 text-emerald-500 border border-emerald-500/20";
+                indicator.className.baseVal = "text-emerald-500 transition-all duration-1000 ease-out";
+            } else {
+                badge.innerText = "Por debajo del promedio";
+                badge.className = "px-3 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase bg-red-500/10 text-red-500 border border-red-500/20";
+                indicator.className.baseVal = "text-red-400 transition-all duration-1000 ease-out";
+            }
+
+            document.getElementById('results-hits-badge').innerText = hits;
+            document.getElementById('results-misses-badge').innerText = misses;
+            
+            let timeUsed = examStartTime - examTimeRemaining;
+            let h = Math.floor(timeUsed / 3600);
+            let m = Math.floor((timeUsed % 3600) / 60);
+            let s = timeUsed % 60;
+            document.getElementById('results-time-badge').innerText = 
+                `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+
+            const skillsContainer = document.getElementById('results-skills-container');
+            skillsContainer.innerHTML = '';
+
+            const skillIcons = {
+                'Pensamiento Matemático': 'fa-calculator text-indigo-500 bg-indigo-500/10',
+                'Pensamiento Científico': 'fa-flask text-violet-500 bg-violet-500/10',
+                'Redacción Indirecta': 'fa-pen-clip text-emerald-500 bg-emerald-500/10',
+                'Comprensión Lectora': 'fa-book-open text-blue-500 bg-blue-500/10',
+                'Inglés': 'fa-language text-pink-500 bg-pink-500/10'
+            };
+
+            for (const [skillName, stats] of Object.entries(breakdown)) {
+                let skillPercent = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+                let rating = skillPercent >= 85 ? 'Excelente' : skillPercent >= 70 ? 'Satisfactorio' : 'Necesita Refuerzo';
+                let ratingColor = skillPercent >= 85 ? 'text-emerald-500' : skillPercent >= 70 ? 'text-amber-500' : 'text-red-400';
+
+                let card = document.createElement('div');
+                card.className = "bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 space-y-4";
+                card.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg ${skillIcons[skillName]}">
+                                <i class="fa-solid ${skillIcons[skillName].split(' ')[0]}"></i>
+                            </div>
+                            <div>
+                                <h5 class="text-sm font-bold text-slate-800 dark:text-slate-200">${skillName}</h5>
+                                <span class="text-[10px] text-slate-400 block mt-0.5">${stats.correct} correctas de ${stats.total}</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-lg font-black text-slate-900 dark:text-white">${skillPercent}%</span>
+                            <span class="block text-[10px] font-semibold ${ratingColor} uppercase tracking-wider">${rating}</span>
+                        </div>
+                    </div>
+                    <div class="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full" style="width: ${skillPercent}%"></div>
+                    </div>
+                `;
+                skillsContainer.appendChild(card);
+            }
+
+            const errorsContainer = document.getElementById('results-errors-container');
+            errorsContainer.innerHTML = '';
+            document.getElementById('results-errors-count').innerText = errors.length;
+
+            if (errors.length === 0) {
+                errorsContainer.innerHTML = `
+                    <div class="text-center p-8 bg-emerald-500/5 border border-dashed border-emerald-500/20 rounded-2xl">
+                        <i class="fa-solid fa-circle-check text-emerald-500 text-3xl mb-2 animate-bounce"></i>
+                        <p class="text-sm text-emerald-600 dark:text-emerald-400 font-semibold">¡Examen Perfecto! No se registraron fallas.</p>
+                    </div>
+                `;
+                document.getElementById('btn-start-remedial').disabled = true;
+            } else {
+                document.getElementById('btn-start-remedial').disabled = false;
+                errors.forEach((err, errIdx) => {
+                    let errCard = document.createElement('div');
+                    errCard.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-sm hover:border-slate-300 dark:hover:border-slate-700/80 transition-all duration-150";
+                    errCard.innerHTML = `
+                        <div class="flex items-center justify-between border-b border-dashed border-slate-200 dark:border-slate-800/80 pb-3">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-red-500/10 text-red-400 border border-red-500/10">Falla</span>
+                                <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">${err.question.category}</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 font-mono">ID: ${err.question.subtopic}</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800 dark:text-slate-200 leading-relaxed">${err.question.pregunta}</p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            <div class="p-3 rounded-xl bg-red-500/5 border border-red-500/10 text-red-500/90">
+                                <span class="block font-semibold text-[10px] uppercase text-red-400 tracking-wider mb-1">Tu respuesta:</span>
+                                ${err.userSelection}
+                            </div>
+                            <div class="p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10 text-emerald-500/90">
+                                <span class="block font-semibold text-[10px] uppercase text-emerald-400 tracking-wider mb-1">Respuesta correcta:</span>
+                                ${err.correctText}
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-xl border border-slate-200/50 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            <span class="block font-bold text-indigo-500 uppercase tracking-wide mb-1 text-[10px]"><i class="fa-solid fa-circle-info mr-1"></i>Explicación Pedagógica:</span>
+                            ${err.question.explicacion}
+                        </div>
+                        <div class="flex justify-end pt-1">
+                            <button id="btn-err-gemini-${errIdx}" onclick="requestGeminiErrorExplanation('${errIdx}', '${err.question.id}')" class="hidden px-3.5 py-1.5 bg-violet-600 hover:bg-violet-500 text-[10px] font-bold text-white rounded-lg flex items-center space-x-1.5 shadow-md shadow-violet-600/15">
+                                <i class="fa-solid fa-robot"></i>
+                                <span>Profundizar Explicación con IA</span>
+                            </button>
+                        </div>
+                        <div id="err-explain-box-${errIdx}" class="hidden p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed animate-fade-enter">
+                        </div>
+                    `;
+                    errorsContainer.appendChild(errCard);
+
+                    let btn = document.getElementById(`btn-err-gemini-${errIdx}`);
+                    if (geminiApiKey !== '' && aiModeEnabled) {
+                        btn.classList.remove('hidden');
+                    }
+                });
+            }
+        }
+
+        function startRemedialExam() {
+            let failedTopics = [];
+            examQuestions.forEach((q, idx) => {
+                if (userAnswers[idx] !== q.correcta_index) {
+                    failedTopics.push({ category: q.category, subtopic: q.subtopic });
+                }
+            });
+
+            if (failedTopics.length === 0) return;
+
+            let bank = [];
+            failedTopics.forEach(topic => {
+                if (topic.category === 'Comprensión Lectora') {
+                    let passage = LECTURAS.find(l => topic.subtopic.includes(l.titulo)) || LECTURAS[0];
+                    let q = generateReadingQuestion(passage, Math.floor(Math.random() * 5));
+                    bank.push(q);
+                } else {
+                    let gens = GENERATORS[topic.category];
+                    let gen = gens[Math.floor(Math.random() * gens.length)];
+                    let q = gen();
+                    q.category = topic.category;
+                    q.id = `${topic.category.toLowerCase().replace(/ /g, '-')}-remedial-${Math.random()}`;
+                    q.has_lectura = false;
+                    bank.push(q);
+                }
+            });
+
+            currentExamMode = 'remedial';
+            examQuestions = bank;
+            examQuestions.forEach(q => shuffleOptions(q));
+
+            currentQuestionIndex = 0;
+            userAnswers = {};
+            reviewList.clear();
+
+            let duration = examQuestions.length * 90;
+            examTimeRemaining = duration;
+            examStartTime = duration;
+            startTimer();
+
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.remove('hidden');
+            document.getElementById('header-exam-status').classList.remove('hidden');
+
+            renderQuestion();
+            buildQuestionMapGrid();
+        }
+
+        function resetToWelcome() {
+            if (examTimer) clearInterval(examTimer);
+            loadStatsBanner();
+
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('exam-screen').classList.add('hidden');
+            document.getElementById('header-exam-status').classList.add('hidden');
+            document.getElementById('welcome-screen').classList.remove('hidden');
+        }
+
+        // ==================== FLOATABLE ACCORDION FORMULAS ====================
+        function toggleFormulas() {
+            const drawer = document.getElementById('formulas-drawer');
+            drawer.classList.toggle('translate-x-full');
+        }
+
+        function toggleAccordion(id) {
+            const panel = document.getElementById(id);
+            const icon = document.getElementById(`icon-${id}`);
+
+            panel.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        }
+
+        // ==================== FLOATING PIZARRA (SCRATCHPAD) CANVAS ====================
+        let canvas, ctx;
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let brushColor = '#000000';
+        let brushSize = 5;
+        let isEraser = false;
+
+        function initScratchpad() {
+            canvas = document.getElementById('scratchpad-canvas');
+            ctx = canvas.getContext('2d');
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const windowEl = document.getElementById('scratchpad-window');
+            const header = document.getElementById('scratchpad-header');
+            
+            let isDragging = false;
+            let dragOffsetX = 0;
+            let dragOffsetY = 0;
+
+            header.addEventListener('mousedown', (e) => {
+                if (e.target !== header && e.target.parentNode !== header) return;
+                isDragging = true;
+                dragOffsetX = e.clientX - windowEl.offsetLeft;
+                dragOffsetY = e.clientY - windowEl.offsetTop;
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    windowEl.style.left = `${e.clientX - dragOffsetX}px`;
+                    windowEl.style.top = `${e.clientY - dragOffsetY}px`;
+                    windowEl.style.right = 'auto';
+                }
+            });
+
+            window.addEventListener('mouseup', () => { isDragging = false; });
+
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+
+            canvas.addEventListener('touchstart', (e) => {
+                let t = e.touches[0];
+                startDrawing({ clientX: t.clientX, clientY: t.clientY });
+            });
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                let t = e.touches[0];
+                draw({ clientX: t.clientX, clientY: t.clientY });
+            });
+            canvas.addEventListener('touchend', stopDrawing);
+
+            setScratchpadColor('theme-color');
+            setScratchpadSize(5);
+        }
+
+        function resizeCanvas() {
+            if (!canvas) return;
+            let tempImg = canvas.toDataURL();
+            let rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+
+            let img = new Image();
+            img.src = tempImg;
+            img.onload = () => ctx.drawImage(img, 0, 0);
+
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            let rect = canvas.getBoundingClientRect();
+            lastX = e.clientX - rect.left;
+            lastY = e.clientY - rect.top;
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            let rect = canvas.getBoundingClientRect();
+            let currX = e.clientX - rect.left;
+            let currY = e.clientY - rect.top;
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(currX, currY);
+
+            if (isEraser) {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = brushSize * 2.5;
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+                if (brushColor === 'theme-color') {
+                    let isDark = document.documentElement.classList.contains('dark');
+                    ctx.strokeStyle = isDark ? '#FFFFFF' : '#0F172A';
+                } else {
+                    ctx.strokeStyle = brushColor;
+                }
+                ctx.lineWidth = brushSize;
+            }
+            
+            ctx.stroke();
+
+            lastX = currX;
+            lastY = currY;
+        }
+
+        function stopDrawing() { isDrawing = false; }
+
+        function toggleScratchpad() {
+            const windowEl = document.getElementById('scratchpad-window');
+            windowEl.classList.toggle('hidden');
+            if (!windowEl.classList.contains('hidden')) {
+                setTimeout(resizeCanvas, 50);
+            }
+        }
+
+        function clearScratchpad() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function setScratchpadColor(color) {
+            isEraser = false;
+            brushColor = color;
+            
+            document.getElementById('color-red').classList.remove('ring-4', 'ring-red-400/30');
+            document.getElementById('color-blue').classList.remove('ring-4', 'ring-blue-400/30');
+            document.getElementById('color-emerald').classList.remove('ring-4', 'ring-emerald-400/30');
+            document.getElementById('color-theme').classList.remove('ring-4', 'ring-indigo-400/30');
+            document.getElementById('tool-eraser').classList.remove('bg-indigo-500/10', 'text-indigo-500');
+
+            if (color === '#EF4444') document.getElementById('color-red').classList.add('ring-4', 'ring-red-400/30');
+            else if (color === '#3B82F6') document.getElementById('color-blue').classList.add('ring-4', 'ring-blue-400/30');
+            else if (color === '#10B981') document.getElementById('color-emerald').classList.add('ring-4', 'ring-emerald-400/30');
+            else if (color === 'theme-color') document.getElementById('color-theme').classList.add('ring-4', 'ring-indigo-400/30');
+        }
+
+        function setScratchpadEraser() {
+            isEraser = true;
+            document.getElementById('color-red').classList.remove('ring-4', 'ring-red-400/30');
+            document.getElementById('color-blue').classList.remove('ring-4', 'ring-blue-400/30');
+            document.getElementById('color-emerald').classList.remove('ring-4', 'ring-emerald-400/30');
+            document.getElementById('color-theme').classList.remove('ring-4', 'ring-indigo-400/30');
+
+            document.getElementById('tool-eraser').classList.add('bg-indigo-500/10', 'text-indigo-500');
+        }
+
+        // Sets brush size
+        function setScratchpadSize(size) {
+            brushSize = size;
+            document.getElementById('size-fine').className = "px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold";
+            document.getElementById('size-med').className = "px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold";
+            document.getElementById('size-thick').className = "px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold";
+
+            if (size === 2) document.getElementById('size-fine').className = "px-2 py-1 rounded bg-indigo-500/10 text-indigo-500 font-semibold";
+            else if (size === 5) document.getElementById('size-med').className = "px-2 py-1 rounded bg-indigo-500/10 text-indigo-500 font-semibold";
+            else if (size === 10) document.getElementById('size-thick').className = "px-2 py-1 rounded bg-indigo-500/10 text-indigo-500 font-semibold";
+        }
+
+        // ==================== GEMINI AI GENERATIVE MODULE (REST, SAFEGUARDS & INTEGRATION) ====================
+        
+        function toggleGeminiModal(show) {
+            document.getElementById('gemini-config-modal').classList.toggle('hidden', !show);
+            if (show) {
+                document.getElementById('input-gemini-key').value = geminiApiKey;
+                document.getElementById('select-gemini-model').value = geminiModel;
+                document.getElementById('checkbox-ai-mode').checked = aiModeEnabled;
+            }
+        }
+
+        function toggleKeyVisibility() {
+            const input = document.getElementById('input-gemini-key');
+            const icon = document.getElementById('key-visibility-icon');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.className = "fa-solid fa-eye-slash";
+            } else {
+                input.type = "password";
+                icon.className = "fa-solid fa-eye";
+            }
+        }
+
+        function saveGeminiConfig() {
+            geminiApiKey = document.getElementById('input-gemini-key').value.trim();
+            geminiModel = document.getElementById('select-gemini-model').value;
+            aiModeEnabled = document.getElementById('checkbox-ai-mode').checked;
+
+            localStorage.setItem('gemini_api_key', geminiApiKey);
+            localStorage.setItem('gemini_model', geminiModel);
+            localStorage.setItem('gemini_ai_enabled', aiModeEnabled);
+
+            loadGeminiConfig();
+            toggleGeminiModal(false);
+            
+            if (document.getElementById('exam-screen').classList.contains('hidden') === false) {
+                renderQuestion();
+            }
+        }
+
+        function loadGeminiConfig() {
+            const dot = document.getElementById('gemini-status-dot');
+            if (geminiApiKey !== '' && aiModeEnabled) {
+                dot.className = "absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-500";
+            } else {
+                dot.className = "absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500";
+            }
+        }
+
+        // Anti-Charge check function to disable AI safely
+        function triggerBillingSafeguard(reason = '') {
+            aiModeEnabled = false;
+            geminiApiKey = '';
+            localStorage.setItem('gemini_ai_enabled', 'false');
+            localStorage.setItem('gemini_api_key', '');
+            
+            loadGeminiConfig();
+            
+            if (document.getElementById('exam-screen').classList.contains('hidden') === false) {
+                renderQuestion();
+            }
+
+            alert(`[Salvaguarda de Seguridad de IA Activa]\n\nSe ha detectado un posible requerimiento de cobro, cuota de pago o error de facturación por parte de la API de Google (Código: 402 / Quota). \n\nPor tu seguridad y para evitar CUALQUIER tipo de cargo económico, la conexión con Gemini ha sido desactivada automáticamente. El simulador ha regresado de forma inmediata al modo 100% local y offline. Podrás seguir estudiando de forma totalmente gratuita y segura.`);
+        }
+
+        async function testGeminiConnection() {
+            const tempKey = document.getElementById('input-gemini-key').value.trim();
+            const tempModel = document.getElementById('select-gemini-model').value;
+            const btn = document.getElementById('btn-test-connection');
+
+            if (!tempKey) {
+                alert("Por favor introduce una API Key válida primero.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Probando...";
+
+            try {
+                let response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${tempModel}:generateContent?key=${tempKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: "Responde únicamente con la palabra 'Conectado'." }] }]
+                    })
+                });
+
+                // STRICT BILLING SAFEGUARD INTERCEPTION
+                if (response.status === 402) {
+                    triggerBillingSafeguard("HTTP 402");
+                    return;
+                }
+
+                let data = await response.json();
+
+                if (data.error) {
+                    let code = data.error.code;
+                    let message = data.error.message.toLowerCase();
+                    // Intercept any billing, budget, payment or quota mentions
+                    if (code === 402 || message.includes('billing') || message.includes('quota') || message.includes('payment') || message.includes('credit')) {
+                        triggerBillingSafeguard(message);
+                        return;
+                    }
+                }
+
+                if (response.ok && data.candidates && data.candidates[0].content.parts[0].text) {
+                    alert("¡Conexión Exitosa con Gemini!");
+                } else {
+                    let errMessage = data.error ? data.error.message : 'Error desconocido';
+                    alert(`Error en respuesta: ${errMessage}`);
+                }
+            } catch (err) {
+                alert(`Error de Conexión: ${err.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Probar Conexión";
+            }
+        }
+
+        async function requestGeminiAltQuestion() {
+            if (!geminiApiKey) return;
+
+            const q = examQuestions[currentQuestionIndex];
+            const aiBadge = document.getElementById('btn-ai-generate-alt');
+            
+            aiBadge.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Generando...</span>`;
+            aiBadge.disabled = true;
+
+            const prompt = `Genera una pregunta de examen de opción múltiple para estudiantes de secundaria preparándose para CENEVAL EXANI-I.
+Categoría: ${q.category}
+Subtema: ${q.subtopic}
+Dificultad: Secundaria Medio-Alto.
+Requerimientos: 
+- El texto debe ser en español de México.
+- Exactamente 3 opciones (A, B, C) donde una es la correcta y las otras dos son distractores realistas.
+- Formato JSON con estructura idéntica a:
+{
+  "pregunta": "Enunciado del problema...",
+  "opciones": ["Opción correcta", "Distractor 1", "Distractor 2"],
+  "correcta_index": 0,
+  "explicacion": "Explicación pedagógica detallada..."
+}
+- Evita agregar bloques de formato markdown como \`\`\`json. Solo regresa el string JSON.`;
+
+            try {
+                let response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${geminiApiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { responseMimeType: "application/json" }
+                    })
+                });
+
+                // STRICT BILLING SAFEGUARD INTERCEPTION
+                if (response.status === 402) {
+                    triggerBillingSafeguard("HTTP 402");
+                    return;
+                }
+
+                let data = await response.json();
+
+                if (data.error) {
+                    let message = data.error.message.toLowerCase();
+                    if (data.error.code === 402 || message.includes('billing') || message.includes('quota') || message.includes('payment')) {
+                        triggerBillingSafeguard(message);
+                        return;
+                    }
+                    throw new Error(data.error.message);
+                }
+
+                let jsonText = data.candidates[0].content.parts[0].text;
+                let parsed = JSON.parse(jsonText);
+
+                q.pregunta = parsed.pregunta;
+                q.opciones = parsed.opciones;
+                q.correcta_index = parsed.correcta_index;
+                q.explicacion = parsed.explicacion;
+
+                delete userAnswers[currentQuestionIndex];
+                
+                shuffleOptions(q);
+                renderQuestion();
+                buildQuestionMapGrid();
+
+                alert("¡Reactivo alternativo generado con éxito por la IA!");
+
+            } catch (err) {
+                alert(`Error al generar reactivo por IA: ${err.message}`);
+            } finally {
+                aiBadge.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles animate-pulse"></i> <span>Alternativo con IA</span>`;
+                aiBadge.disabled = false;
+            }
+        }
+
+        async function requestGeminiExplanation() {
+            if (!geminiApiKey) return;
+
+            const q = examQuestions[currentQuestionIndex];
+            const btn = document.getElementById('btn-ask-gemini-explanation');
+            const expText = document.getElementById('explanation-text');
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Analizando...`;
+
+            let userAnsText = userAnswers[currentQuestionIndex] !== undefined ? q.opciones[userAnswers[currentQuestionIndex]] : 'Sin responder';
+            const prompt = `Actúa como un profesor experto y pedagogo preparando estudiantes para el examen EXANI-I.
+Explica detalladamente la siguiente pregunta, analizando cada opción y detallando por qué es correcta o incorrecta.
+Pregunta: ${q.pregunta}
+Opciones dadas:
+A) ${q.opciones[0]}
+B) ${q.opciones[1]}
+C) ${q.opciones[2]}
+
+La respuesta correcta es la opción que dice: ${q.opciones[q.correcta_index]}.
+El alumno seleccionó: ${userAnsText}.
+
+Redacta de manera pedagógica, clara y motivadora en español de México. Usa formato Markdown limpio para resaltar conceptos clave.`;
+
+            try {
+                let response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${geminiApiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
+
+                // STRICT BILLING SAFEGUARD INTERCEPTION
+                if (response.status === 402) {
+                    triggerBillingSafeguard("HTTP 402");
+                    return;
+                }
+
+                let data = await response.json();
+
+                if (data.error) {
+                    let message = data.error.message.toLowerCase();
+                    if (data.error.code === 402 || message.includes('billing') || message.includes('quota') || message.includes('payment')) {
+                        triggerBillingSafeguard(message);
+                        return;
+                    }
+                    throw new Error(data.error.message);
+                }
+
+                let explainMarkdown = data.candidates[0].content.parts[0].text;
+                let formatted = formatSimpleMarkdown(explainMarkdown);
+                expText.innerHTML = formatted;
+
+            } catch (err) {
+                alert(`Error al contactar con Gemini: ${err.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-robot"></i> <span>Profundizar con IA</span>`;
+            }
+        }
+
+        async function requestGeminiErrorExplanation(errIdx, questionId) {
+            if (!geminiApiKey) return;
+
+            const btn = document.getElementById(`btn-err-gemini-${errIdx}`);
+            const box = document.getElementById(`err-explain-box-${errIdx}`);
+            const q = examQuestions.find(item => item.id === questionId);
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Cargando explicación...`;
+            box.classList.remove('hidden');
+            box.innerHTML = `<div class="flex items-center space-x-2 text-slate-500 py-2"><i class="fa-solid fa-circle-notch animate-spin"></i> <span>Gemini está analizando tu falla...</span></div>`;
+
+            const prompt = `Analiza detalladamente este error cometido por un sustentante del EXANI-I:
+Habilidad: ${q.category}
+Subtema: ${q.subtopic}
+Pregunta: ${q.pregunta}
+Respuesta Correcta: ${q.opciones[q.correcta_index]}
+
+Explica paso a paso de manera sencilla y clara el procedimiento para resolver esta pregunta de examen y evitar cometer el mismo error en el futuro. Escribe en español de México.`;
+
+            try {
+                let response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${geminiApiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
+
+                // STRICT BILLING SAFEGUARD INTERCEPTION
+                if (response.status === 402) {
+                    triggerBillingSafeguard("HTTP 402");
+                    return;
+                }
+
+                let data = await response.json();
+
+                if (data.error) {
+                    let message = data.error.message.toLowerCase();
+                    if (data.error.code === 402 || message.includes('billing') || message.includes('quota') || message.includes('payment')) {
+                        triggerBillingSafeguard(message);
+                        return;
+                    }
+                    throw new Error(data.error.message);
+                }
+
+                let text = data.candidates[0].content.parts[0].text;
+                box.innerHTML = `
+                    <div class="border-t border-slate-200 dark:border-slate-800 pt-3 mt-2 space-y-2">
+                        <strong class="text-xs text-violet-500 block uppercase"><i class="fa-solid fa-brain"></i> Explicación Personalizada de Gemini:</strong>
+                        <div class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">${formatSimpleMarkdown(text)}</div>
+                    </div>
+                `;
+            } catch (err) {
+                box.innerHTML = `<div class="text-xs text-red-400">Error al cargar explicación: ${err.message}</div>`;
+            } finally {
+                btn.classList.add('hidden');
+            }
+        }
+
+        function formatSimpleMarkdown(text) {
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`([^`]+)`/g, '<code class="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-xs font-mono">$1</code>')
+                .replace(/\n/g, '<br>');
+        }
+    </script>
+</body>
+</html>
