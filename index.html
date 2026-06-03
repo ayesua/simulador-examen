@@ -1250,43 +1250,9 @@
             ]
         };
 
-        // Pre-build dynamic generator questions matching template configurations
-        function generateLocalBank(mode) {
-            let bank = [];
-            const domains = ['Pensamiento Matemático', 'Pensamiento Científico', 'Redacción Indirecta', 'Comprensión Lectora', 'Inglés'];
-            
-            let countPerDomain = (mode === 'diagnostic') ? 6 : 32;
-
-            domains.forEach(domain => {
-                if (domain === 'Comprensión Lectora') {
-                    for (let i = 0; i < countPerDomain; i++) {
-                        let passageIndex = Math.floor(i / 6) % LECTURAS.length;
-                        let passage = LECTURAS[passageIndex];
-                        let q = generateReadingQuestion(passage, i);
-                        bank.push(q);
-                    }
-                } else {
-                    let gens = GENERATORS[domain];
-                    for (let i = 0; i < countPerDomain; i++) {
-                        let gen = gens[i % gens.length];
-                        let q = gen();
-                        q.category = domain;
-                        q.id = `${domain.toLowerCase().replace(/ /g, '-')}-${i}`;
-                        q.has_lectura = false;
-                        q.original_index = bank.length;
-                        bank.push(q);
-                    }
-                }
-            });
-
-            fisherYatesShuffle(bank);
-            return bank;
-        }
-
-        // Reading questions generator
-        function generateReadingQuestion(passage, idx) {
+        // Helper to retrieve reading questions
+        function getReadingQuestionsPool(passage) {
             let questionsPool = [];
-            
             if (passage.id === 'lectura-sars') {
                 questionsPool = [
                     {
@@ -1387,7 +1353,74 @@
                     }
                 ];
             }
+            return questionsPool;
+        }
 
+        // Pre-build dynamic generator questions matching template configurations
+        function generateLocalBank(mode) {
+            let bank = [];
+            const domains = ['Pensamiento Matemático', 'Pensamiento Científico', 'Redacción Indirecta', 'Comprensión Lectora', 'Inglés'];
+            
+            let countPerDomain = (mode === 'diagnostic') ? 6 : 32;
+
+            domains.forEach(domain => {
+                if (domain === 'Comprensión Lectora') {
+                    // Collect and shuffle all reading questions to guarantee variety and no duplicates
+                    let readingPool = [];
+                    LECTURAS.forEach(passage => {
+                        let pool = getReadingQuestionsPool(passage);
+                        pool.forEach((qItem, pIdx) => {
+                            readingPool.push({
+                                category: 'Comprensión Lectora',
+                                subtopic: `Texto: ${passage.titulo}`,
+                                pregunta: qItem.pregunta,
+                                opciones: [...qItem.opciones],
+                                correcta_index: qItem.correcta_index,
+                                explicacion: qItem.explicacion,
+                                has_lectura: true,
+                                lectura_id: passage.id,
+                                id: `comprension-${passage.id}-${pIdx}-${Math.floor(Math.random() * 1000000)}`
+                            });
+                        });
+                    });
+
+                    // Shuffle the reading pool
+                    fisherYatesShuffle(readingPool);
+
+                    // Pull countPerDomain questions
+                    for (let i = 0; i < countPerDomain; i++) {
+                        let q = readingPool[i % readingPool.length];
+                        let qClone = JSON.parse(JSON.stringify(q));
+                        qClone.original_index = bank.length;
+                        bank.push(qClone);
+                    }
+                } else {
+                    let gens = [...GENERATORS[domain]];
+                    fisherYatesShuffle(gens);
+                    for (let i = 0; i < countPerDomain; i++) {
+                        let gen = gens[i % gens.length];
+                        // Reshuffle if wrapping around to ensure maximum variability
+                        if (i > 0 && i % gens.length === 0) {
+                            fisherYatesShuffle(gens);
+                            gen = gens[0];
+                        }
+                        let q = gen();
+                        q.category = domain;
+                        q.id = `${domain.toLowerCase().replace(/ /g, '-')}-${i}-${Math.floor(Math.random() * 1000000)}`;
+                        q.has_lectura = false;
+                        q.original_index = bank.length;
+                        bank.push(q);
+                    }
+                }
+            });
+
+            fisherYatesShuffle(bank);
+            return bank;
+        }
+
+        // Reading questions generator (used in remedial mode)
+        function generateReadingQuestion(passage, idx) {
+            let questionsPool = getReadingQuestionsPool(passage);
             let qItem = questionsPool[idx % questionsPool.length];
             return {
                 category: 'Comprensión Lectora',
@@ -1398,7 +1431,7 @@
                 explicacion: qItem.explicacion,
                 has_lectura: true,
                 lectura_id: passage.id,
-                id: `comprension-${idx}`
+                id: `comprension-${passage.id}-${idx}-${Math.floor(Math.random() * 1000000)}`
             };
         }
 
