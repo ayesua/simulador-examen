@@ -812,7 +812,7 @@
                             `x = ${x - Math.floor(Math.random() * 4) - 1}`
                         ],
                         correcta_index: 0,
-                        explicacion: `Agrupando términos semejantes: ${a}x - (${c}x) = ${d} - (${b}) <br> (${a - c})x = ${d - b} <br> x = ${d - b} / ${a - c} = ${x}.`
+                        explicacion: `<strong>Razonamiento:</strong> Agrupamos los términos que contienen x en un lado de la igualdad y los términos constantes en el otro. En este caso: ${a}x - (${c}x) = ${d} - (${b}) \\Rightarrow (${a - c})x = ${d - b}. Despejamos dividiendo: x = ${d - b} / ${a - c} = ${x}.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Dada la ecuación 4x - 5 = 2x + 7, agrupamos las x: 4x - 2x = 7 + 5 \\Rightarrow 2x = 12 \\Rightarrow x = 6.<br>• <strong>Ejemplo 2:</strong> Para 3x + 8 = -x + 12, agrupamos: 3x + x = 12 - 8 \\Rightarrow 4x = 4 \\Rightarrow x = 1.`
                     };
                 },
                 // 2. Pitágoras: Calcular Hipotenusa
@@ -833,7 +833,7 @@
                             `${Math.round(c * 1.2)} cm`
                         ],
                         correcta_index: 0,
-                        explicacion: `Por el Teorema de Pitágoras, la hipotenusa es c = √(a² + b²). <br> En este caso: c = √(${a}² + ${b}²) = √(${a*a} + ${b*b}) = √(${a*a + b*b}) = ${c} cm.`
+                        explicacion: `<strong>Razonamiento:</strong> En todo triángulo rectángulo, el cuadrado de la hipotenusa (c) es igual a la suma de los cuadrados de los catetos (a y b). Por ende, c = \\sqrt{a^2 + b^2}. Sustituyendo: c = \\sqrt{${a}^2 + ${b}^2} = \\sqrt{${a*a}} + \\sqrt{${b*b}} = \\sqrt{${a*a + b*b}} = ${c} cm.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Si una pantalla tiene catetos de 30 cm y 40 cm, su diagonal o hipotenusa es \\sqrt{30^2 + 40^2} = \\sqrt{900 + 1600} = 50 cm.<br>• <strong>Ejemplo 2:</strong> Al apuntalar una pared con una viga inclinada apoyada a 1.5 m del pie y a 2 m de altura, la viga mide \\sqrt{1.5^2 + 2^2} = \\sqrt{2.25 + 4} = 2.5 m.`
                     };
                 },
                 // 3. Pitágoras: Calcular Cateto
@@ -853,7 +853,7 @@
                             `${Math.round(b * 0.8)} metros`
                         ],
                         correcta_index: 0,
-                        explicacion: `Usamos la fórmula despejada del Teorema de Pitágoras para un cateto: b = √(c² - a²). <br> Sustituyendo valores: b = √(${c}² - ${a}²) = √(${c*c} - ${a*a}) = √(${c*c - a*a}) = ${b} metros.`
+                        explicacion: `<strong>Razonamiento:</strong> Para encontrar un cateto desconocido (b) conociendo la hipotenusa (c) y el otro cateto (a), restamos el cuadrado del cateto conocido al cuadrado de la hipotenusa y calculamos la raíz: b = \\sqrt{c^2 - a^2}. Sustituyendo: b = \\sqrt{${c}^2 - ${a}^2} = \\sqrt{${c*c} - ${a*a}} = \\sqrt{${c*c - a*a}} = ${b} metros.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Si una rampa tiene una hipotenusa de 5 m y una altura (cateto) de 3 m, su base mide \\sqrt{5^2 - 3^2} = \\sqrt{25 - 9} = 4 m.<br>• <strong>Ejemplo 2:</strong> Para un cable tensor de 13 m anclado al suelo y a un poste de 12 m de alto, la distancia del anclaje al pie es \\sqrt{13^2 - 12^2} = \\sqrt{169 - 144} = 5 m.`
                     };
                 },
                 // 4. Productos Notables (Binomio al Cuadrado)
@@ -874,7 +874,7 @@
                             `<span class="font-mono">${term1}x² + ${a*b}x + ${term3}</span>`
                         ],
                         correcta_index: 0,
-                        explicacion: `La regla del binomio al cuadrado dice: (u + v)² = u² + 2uv + v². <br> Aplicándolo: (${a}x)² + 2(${a}x)(${b}) + (${b})² = ${term1}x² + ${term2}x + ${term3}.`
+                        explicacion: `<strong>Razonamiento:</strong> El desarrollo de un binomio al cuadrado sigue la regla: el cuadrado del primer término más el doble producto del primero por el segundo más el cuadrado del segundo: (u + v)² = u² + 2uv + v². Aplicándolo: (${a}x)² + 2(${a}x)(${b}) + (${b})² = ${term1}x² + ${term2}x + ${term3}.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Para (x + 3)², el desarrollo es (x)² + 2(x)(3) + 3² = x² + 6x + 9.<br>• <strong>Ejemplo 2:</strong> Para (2x + 5)², el desarrollo es (2x)² + 2(2x)(5) + 5² = 4x² + 20x + 25.`
                     };
                 },
                 // 5. Productos Notables (Diferencia de Cuadrados)
@@ -894,7 +894,7 @@
                             `<span class="font-mono">(${term1}x - ${term2})(x + 1)</span>`
                         ],
                         correcta_index: 0,
-                        explicacion: `Una diferencia de cuadrados u² - v² se factoriza como binomios conjugados: (u + v)(u - v). <br> Aquí, u = √(${term1}x²) = ${a}x, y v = √(${term2}) = ${b}. Por tanto, es (${a}x + ${b})(${a}x - ${b}).`
+                        explicacion: `<strong>Razonamiento:</strong> Una diferencia de cuadrados algebraicos de la forma u² - v² se factoriza obteniendo las raíces cuadradas de ambos términos y multiplicando su suma por su diferencia (binomios conjugados): (u + v)(u - v). Aquí, u = \\sqrt{${term1}x²} = ${a}x y v = \\sqrt{${term2}} = ${b}, dando como resultado (${a}x + ${b})(${a}x - ${b}).<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Para x² - 9, las raíces son x y 3, por lo que su factorización es (x + 3)(x - 3).<br>• <strong>Ejemplo 2:</strong> Para 4x² - 25, las raíces son 2x y 5, dando como resultado (2x + 5)(2x - 5).`
                     };
                 },
                 // 6. Sistemas de Ecuaciones (Cabezas y Patas)
@@ -914,7 +914,7 @@
                             `Gallinas: ${chickens - 3}, Conejos: ${rabbits + 3}`
                         ],
                         correcta_index: 0,
-                        explicacion: `Planteando el sistema de ecuaciones: <br> x + y = ${heads} (cabezas) <br> 2x + 4y = ${legs} (patas). <br> Multiplicando la primera por -2 y sumando a la segunda: 2y = ${legs - 2*heads} \\Rightarrow y = conejos = ${rabbits}. Sustituyendo en la primera, x = gallinas = ${chickens}.`
+                        explicacion: `<strong>Razonamiento:</strong> Planteamos el sistema con x (gallinas) e y (conejos). Del enunciado: x + y = ${heads} (total animales) y 2x + 4y = ${legs} (patas totales). Multiplicamos la primera por -2 para eliminar las x: -2x - 2y = -${2*heads}. Sumamos esto a la segunda: 2y = ${legs - 2*heads} \\Rightarrow y = ${rabbits} (conejos). Despejando: x = ${heads} - ${rabbits} = ${chickens} (gallinas).<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> En un estacionamiento hay autos (4 ruedas) y motos (2 ruedas). Si hay 10 vehículos y 32 ruedas, planteamos x+y=10 y 2x+4y=32, lo que resulta en 6 autos y 4 motos.<br>• <strong>Ejemplo 2:</strong> Para un grupo de 15 personas con boletos de $50 y $100 con un costo total de $1200, planteamos x+y=15 y 50x+100y=1200, dando 6 boletos de $50 y 9 de $100.`
                     };
                 },
                 // 7. Regla de Tres Inversa
@@ -939,7 +939,7 @@
                             `${(A * C / B).toFixed(1)} días`
                         ],
                         correcta_index: 0,
-                        explicacion: `Es un problema de proporcionalidad inversa: a más obreros, menos días tardarán. Se calcula multiplicando los valores iniciales y dividiendo entre el nuevo número de obreros: <br> (obreros iniciales · días iniciales) / nuevos obreros = (${A} · ${B}) / ${C} = ${D} días.`
+                        explicacion: `<strong>Razonamiento:</strong> En la proporcionalidad inversa, si una magnitud aumenta, la otra disminuye en la misma proporción. Multiplicamos las variables iniciales (obreros · días) para obtener la cantidad total de trabajo en 'obreros-día' (${A} · ${B} = ${product}) y dividimos este producto constante entre la nueva cantidad de obreros (${C}) para hallar los días: ${product} / ${C} = ${D} días.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Si un auto viaja a 60 km/h y tarda 4 horas, a 80 km/h tardará: (60 · 4) / 80 = 240 / 80 = 3 horas.<br>• <strong>Ejemplo 2:</strong> Si 3 grifos llenan un tanque en 12 horas, 4 grifos iguales lo llenarán en: (3 · 12) / 4 = 36 / 4 = 9 horas.`
                     };
                 },
                 // 8. Cálculo de Porcentaje
@@ -959,7 +959,7 @@
                             `\$${finalPrice - 50} pesos`
                         ],
                         correcta_index: 0,
-                        explicacion: `El descuento representa el ${discountPercent}% de \$${originalPrice}, que equivale a \$${savedMoney} pesos. <br> Restando esto del precio original: \$${originalPrice} - \$${savedMoney} = \$${finalPrice} pesos.`
+                        explicacion: `<strong>Razonamiento:</strong> Calculamos el ahorro del descuento multiplicando el precio original por el porcentaje en decimal: $${originalPrice} · ${discountPercent/100} = $${savedMoney}. Luego restamos el ahorro al precio inicial para obtener el costo final: $${originalPrice} - $${savedMoney} = $${finalPrice} pesos.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Una playera de $300 con 20% de descuento cuesta: $300 - ($300 · 0.20) = $300 - $60 = $240.<br>• <strong>Ejemplo 2:</strong> Una mochila de $800 con 15% de descuento cuesta: $800 - ($800 · 0.15) = $800 - $120 = $680.`
                     };
                 },
                 // 9. Sucesiones Aritméticas
@@ -978,7 +978,7 @@
                             `${termN - 2}`
                         ],
                         correcta_index: 0,
-                        explicacion: `La fórmula del término general de una sucesión aritmética es a_n = a_1 + (n - 1)d. <br> Para esta sucesión: a_${n} = ${start} + (${n} - 1) · ${diff} = ${start} + ${n-1} · ${diff} = ${termN}.`
+                        explicacion: `<strong>Razonamiento:</strong> En una sucesión aritmética, cada término se obtiene sumando una diferencia constante (d) al anterior. El término general es a_n = a_1 + (n - 1)d. Aquí, el primer término a_1 = ${start}, la diferencia d = ${diff} y la posición n = ${n}. Sustituyendo: a_${n} = ${start} + (${n} - 1) · ${diff} = ${start} + ${n-1} · ${diff} = ${termN}.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> En la sucesión 2, 5, 8, 11... la diferencia es 3. El término 10 es: 2 + (10 - 1) · 3 = 2 + 27 = 29.<br>• <strong>Ejemplo 2:</strong> En la sucesión 5, 10, 15, 20... la diferencia es 5. El término 20 es: 5 + (20 - 1) · 5 = 5 + 95 = 100.`
                     };
                 },
                 // 10. Área Compuesta
@@ -999,7 +999,7 @@
                             `${finalArea - 10} cm²`
                         ],
                         correcta_index: 0,
-                        explicacion: `Calculamos primero el área total del rectángulo: A_rec = ${w} · ${h} = ${totalArea} cm². <br> El área del cuadrado sustraído es A_sq = ${s} · ${s} = ${squareArea} cm². <br> El área final es la diferencia: ${totalArea} - ${squareArea} = ${finalArea} cm².`
+                        explicacion: `<strong>Razonamiento:</strong> El área de la placa compuesta se obtiene restando el área del cuadrado cortado al área del rectángulo original. Área del rectángulo: A_rec = ${w} · ${h} = ${totalArea} cm². Área del cuadrado sustraído: A_sq = ${s} · ${s} = ${squareArea} cm². Restando ambas áreas: ${totalArea} - ${squareArea} = ${finalArea} cm².<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Si un terreno rectangular de 20 m por 10 m tiene una piscina cuadrada de 4 m de lado, el área verde libre es (20 · 10) - (4 · 4) = 200 - 16 = 184 m².<br>• <strong>Ejemplo 2:</strong> Una hoja de cartón de 30 cm por 20 cm pierde una esquina cuadrada de 5 cm de lado; el cartón sobrante mide (30 · 20) - (5 · 5) = 600 - 25 = 575 cm².`
                     };
                 },
                 // 11. Mediana de datos desordenados
@@ -1031,7 +1031,7 @@
                             `${wrongMedian}`
                         ],
                         correcta_index: 0,
-                        explicacion: `Para obtener la mediana de un conjunto de datos impares, primero se deben ordenar de menor a mayor: <span class="font-mono">${sorted.join(", ")}</span>. El valor central (en la posición 3) es la mediana, es decir, ${median}.`
+                        explicacion: `<strong>Razonamiento:</strong> La mediana es el valor central de un conjunto ordenado de menor a mayor. Primero ordenamos las calificaciones: <span class="font-mono">${sorted.join(", ")}</span>. Al ser un número impar de datos (5 elementos), la mediana es exactamente el valor central (posición 3), es decir, ${median}.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Para los datos 15, 8, 20, 12, 10, los ordenamos: 8, 10, 12, 15, 20. La mediana es 12.<br>• <strong>Ejemplo 2:</strong> Para las estaturas 1.65, 1.80, 1.70, 1.60, 1.75 m, ordenadas son 1.60, 1.65, 1.70, 1.75, 1.80 m; la mediana es 1.70 m.`
                     };
                 },
                 // 12. Probabilidad Clásica (Urna de esferas de colores)
@@ -1061,7 +1061,7 @@
                             `${inverse}`
                         ],
                         correcta_index: 0,
-                        explicacion: `La fórmula de probabilidad clásica es P(A) = Casos favorables / Casos totales. <br> Casos favorables (rojas) = ${red}. <br> Casos totales = ${red} + ${blue} + ${green} = ${total}. <br> Probabilidad = ${red}/${total}, que al simplificarse por su máximo común divisor es ${fraction}.`
+                        explicacion: `<strong>Razonamiento:</strong> Según la Ley de Laplace de probabilidad clásica: P(A) = Casos favorables / Casos posibles totales. Aquí, los casos favorables (esferas rojas) son ${red}, y los casos totales son la suma de todas las esferas: ${red} + ${blue} + ${green} = ${total}. La probabilidad es ${red}/${total}, que al simplificarse por su MCD resulta en ${fraction}.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Si lanzamos un dado estándar de 6 caras, la probabilidad de sacar un número par (2, 4, 6) es 3/6, que equivale a 1/2.<br>• <strong>Ejemplo 2:</strong> En un grupo escolar con 15 niñas y 10 niños, la probabilidad de seleccionar una niña al azar es 15/25, que al simplificarse es 3/5.`
                     };
                 },
                 // 13. Intersección de Parábola con Eje X (Ecuación Cuadrática)
@@ -1090,7 +1090,7 @@
                             `x = ${wrong2}`
                         ],
                         correcta_index: 0,
-                        explicacion: `Para encontrar la intersección con el eje x, igualamos y a 0: x² ${bSign}x ${cSign} = 0. <br> Factorizando el trinomio buscamos dos números que multiplicados den ${c} y sumados den ${b}. Estos números son ${-r1} y ${-r2}: (x + ${-r1})(x + ${-r2}) = 0. <br> Despejando las raíces obtenemos x = ${r1} y x = ${r2}. Por lo tanto, el valor correcto es x = ${correctVal}.`
+                        explicacion: `<strong>Razonamiento:</strong> Los puntos donde una parábola y = ax² + bx + c interseca al eje x corresponden a las raíces de la ecuación cuadrática y = 0. Al igualar x² ${bSign}x ${cSign} = 0, buscamos dos números que multiplicados den ${c} y sumados den ${b}. Estos números son ${-r1} y ${-r2}, lo que da la factorización: (x - ${r1})(x - ${r2}) = 0. Despejando las raíces, obtenemos x = ${r1} y x = ${r2}.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Para la parábola y = x² - 5x + 6, igualamos a 0: (x - 2)(x - 3) = 0. Las intersecciones con el eje x son x = 2 y x = 3.<br>• <strong>Ejemplo 2:</strong> Para y = x² + 2x - 8, igualamos a 0: (x + 4)(x - 2) = 0. Las raíces o intersecciones son x = -4 y x = 2.`
                     };
                 }
             ],
@@ -1110,7 +1110,7 @@
                             `${(distance / 2).toFixed(1)} metros`
                         ],
                         correcta_index: 0,
-                        explicacion: `En un movimiento rectilíneo uniforme (MRU), la distancia se calcula multiplicando la velocidad por el tiempo de viaje: d = v · t = ${velocity} m/s · ${seconds} s = ${distance} metros.`
+                        explicacion: `<strong>Razonamiento:</strong> En el Movimiento Rectilíneo Uniforme (MRU), la velocidad es constante. La relación de la distancia recorrida es $d = v \\cdot t$, donde multiplicamos la velocidad de ${velocity} m/s por el tiempo de ${seconds} s para obtener ${distance} metros.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Un automóvil que viaja en autopista a una velocidad constante de 90 km/h (25 m/s) durante 10 segundos recorrerá una distancia de $25 \\text{ m/s} \\cdot 10 \\text{ s} = 250$ metros.<br>• <strong>Ejemplo 2:</strong> El sonido viaja en el aire a unos 340 m/s; si escuchas un trueno 3 segundos después de ver el relámpago, el rayo cayó a $340 \\text{ m/s} \\cdot 3 \\text{ s} = 1020$ metros.`
                     };
                 },
                 // 2. Fuerza y Aceleración F = ma
@@ -1128,7 +1128,7 @@
                             `${(force - accel).toFixed(1)} kg`
                         ],
                         correcta_index: 0,
-                        explicacion: `Aplicando la Segunda Ley de Newton, F = m · a. Despejando la masa: m = F / a. <br> Reemplazando los datos: m = ${force} N / ${accel} m/s² = ${mass} kg.`
+                        explicacion: `<strong>Razonamiento:</strong> De acuerdo con la Segunda Ley de Newton, la fuerza neta aplicada sobre un objeto es directamente proporcional a su aceleración y a su masa ($F = m \\cdot a$). Despejando la masa, obtenemos $m = F / a$. Sustituyendo los valores de fuerza ($${force} N) y aceleración ($${accel} m/s²), resulta en $${mass} kg.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Si empujas un carrito de supermercado con una fuerza de 20 N y acelera a 2 m/s², su masa es de $20 \\text{ N} / 2 \\text{ m/s}^2 = 10$ kg.<br>• <strong>Ejemplo 2:</strong> Un juguete de 0.5 kg acelerado a 10 m/s² requiere una fuerza neta de $0.5 \\text{ kg} \\cdot 10 \\text{ m/s}^2 = 5$ N.`
                     };
                 },
                 // 3. Mitocondria Organelo
@@ -1142,7 +1142,7 @@
                             `Aparato de Golgi`
                         ],
                         correcta_index: 0,
-                        explicacion: `Las mitocondrias son los organelos encargados de la respiración celular aerobia para obtener energía en forma de ATP metabólico.`
+                        explicacion: `<strong>Razonamiento:</strong> Las mitocondrias actúan como las centrales energéticas de las células eucariotas. Llevan a cabo la respiración celular aeróbica para sintetizar trifosfato de adenosina (ATP) a partir de glucosa y oxígeno, el cual sirve como la principal moneda energética del metabolismo celular.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Las células musculares del corazón poseen una enorme cantidad de mitocondrias debido a su alta y constante demanda de energía para bombear sangre.<br>• <strong>Ejemplo 2:</strong> Durante el ejercicio físico intenso, el ritmo respiratorio aumenta para proveer más oxígeno a las mitocondrias de los músculos esqueléticos.`
                     };
                 },
                 // 4. Enlace Iónico
@@ -1161,7 +1161,7 @@
                             `Enlace metálico`
                         ],
                         correcta_index: 0,
-                        explicacion: `La transferencia de electrones entre un metal (que cede electrones) y un no metal (que los recibe) genera iones de carga opuesta que se atraen electrostáticamente, formando un enlace iónico.`
+                        explicacion: `<strong>Razonamiento:</strong> El enlace iónico se forma cuando hay una transferencia completa de uno o más electrones desde un átomo metálico (con baja electronegatividad) a un no metálico (con alta electronegatividad). Esto genera cationes (carga positiva) y aniones (carga negativa) que permanecen unidos por fuertes fuerzas de atracción electrostática.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> El cloruro de sodio (sal de mesa, NaCl), donde el sodio (Na) cede su único electrón de valencia al cloro (Cl).<br>• <strong>Ejemplo 2:</strong> El fluoruro de litio (LiF), usado en cerámicas, donde el litio transfiere un electrón al átomo de flúor.`
                     };
                 },
                 // 5. Enlace Covalente
@@ -1175,7 +1175,7 @@
                             `Enlace metálico`
                         ],
                         correcta_index: 0,
-                        explicacion: `El enlace covalente se produce por el compartimiento de electrones entre dos elementos no metálicos para completar su capa de valencia.`
+                        explicacion: `<strong>Razonamiento:</strong> El enlace covalente ocurre cuando dos átomos no metálicos comparten uno o más pares de electrones de valencia para alcanzar la estabilidad química (siguiendo generalmente la regla del octeto). Al tener electronegatividades similares, ninguno arranca los electrones del otro, sino que los comparten.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> La molécula de agua ($H_2O$), donde el oxígeno comparte electrones con dos átomos de hidrógeno de manera covalente polar.<br>• <strong>Ejemplo 2:</strong> El gas oxígeno ($O_2$) que respiramos, en el cual dos átomos de oxígeno comparten dos pares de electrones formando un enlace doble.`
                     };
                 },
                 // 6. Gases Nobles
@@ -1192,7 +1192,7 @@
                             `Halógenos`
                         ],
                         correcta_index: 0,
-                        explicacion: `Los gases nobles (grupo 18 o VIII A) tienen su última órbita de electrones saturada (octeto completo), lo que les otorga una enorme estabilidad y baja reactividad.`
+                        explicacion: `<strong>Razonamiento:</strong> Los gases nobles ocupan el grupo 18 (o VIII A) de la tabla periódica. Poseen su última capa de electrones completamente llena (dos en el helio, ocho en los demás), lo que los hace químicamente inertes o extremadamente estables, ya que no necesitan ganar, perder ni compartir electrones.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> El helio (He) se utiliza para inflar globos debido a que es menos denso que el aire y no es inflamable, haciéndolo seguro a diferencia del hidrógeno.<br>• <strong>Ejemplo 2:</strong> El argón (Ar) se inyecta en el interior de focos incandescentes para evitar que el filamento de tungsteno se queme con el oxígeno.`
                     };
                 },
                 // 7. Cambios de Estado
@@ -1206,7 +1206,7 @@
                             `Condensación`
                         ],
                         correcta_index: 0,
-                        explicacion: `La sublimación directa (o sublimación) es la transición directa del estado sólido al gaseoso sin transitar por el estado de agregación líquido.`
+                        explicacion: `<strong>Razonamiento:</strong> La sublimación directa es un cambio de estado endotérmico en el cual una sustancia sólida absorbe suficiente energía térmica para vencer las fuerzas de cohesión molecular y pasar directamente al estado gaseoso, omitiendo por completo la fase líquida intermedia.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Las pastillas desodorantes para baños de naftalina se evaporan lentamente del estado sólido al gaseoso perfumando el ambiente.<br>• <strong>Ejemplo 2:</strong> El hielo seco (CO₂ sólido) colocado en un ponche navideño libera vapor blanquecino de CO₂ gaseoso directamente.`
                     };
                 },
                 // 8. División Celular
@@ -1220,15 +1220,33 @@
                             `Profase`
                         ],
                         correcta_index: 0,
-                        explicacion: `La anafase es la fase de la mitosis donde los microtúbulos tiran de las cromátidas hermanas, dividiéndolas y moviéndolas hacia extremos celulares contrarios.`
+                        explicacion: `<strong>Razonamiento:</strong> Durante la anafase de la mitosis, las proteínas de unión en el centrómero se rompen y las cromátidas hermanas se separan, convirtiéndose en cromosomas individuales. El huso acromático o mitótico se acorta, arrastrando a cada cromosoma hacia los polos opuestos de la célula en división.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> La regeneración de la piel humana tras un raspón se logra gracias a células basales realizando mitosis activa en fase de anafase para duplicarse.<br>• <strong>Ejemplo 2:</strong> La quimioterapia contra el cáncer a menudo utiliza fármacos que bloquean la anafase celular, impidiendo la separación de cromosomas y frenando tumores.`
                     };
                 },
                 // 9. Metabolismo Celular
                 () => {
                     const processes = [
-                        { name: "degradación de glucosa durante la respiración celular (glucólisis)", type: "Catabolismo", desc: "un proceso catabólico porque descompone moléculas complejas (glucosa) en compuestos más simples para liberar energía útil." },
-                        { name: "síntesis de proteínas a partir de aminoácidos en los ribosomas", type: "Anabolismo", desc: "un proceso anabólico porque consume energía metabólica para construir macromoléculas complejas a partir de monómeros simples." },
-                        { name: "fotosíntesis en los cloroplastos de las células vegetales", type: "Anabolismo", desc: "un proceso anabólico porque consume energía lumínica para sintetizar glucosa a partir de dióxido de carbono y agua." }
+                        {
+                            name: "degradación de glucosa durante la respiración celular (glucólisis)",
+                            type: "Catabolismo",
+                            razonamiento: "La glucólisis es un proceso catabólico porque consiste en la degradación o descomposición de una molécula compleja de seis carbonos (glucosa) en moléculas de tres carbonos (piruvato), liberando energía química que es capturada en forma de ATP y NADH.",
+                            ejemplo1: "La digestión de los alimentos en el estómago e intestinos descompone proteínas en aminoácidos para obtener nutrientes esenciales (catabolismo).",
+                            ejemplo2: "Durante una carrera de velocidad, las células musculares degradan glucosa rápidamente por vía anaeróbica para obtener energía inmediata."
+                        },
+                        {
+                            name: "síntesis de proteínas a partir de aminoácidos en los ribosomas",
+                            type: "Anabolismo",
+                            razonamiento: "La síntesis de proteínas es un proceso anabólico porque consiste en la construcción o fabricación de macromoléculas complejas (proteínas) a partir de precursores más simples (aminoácidos), lo cual requiere el consumo de energía en forma de ATP celular.",
+                            ejemplo1: "El crecimiento de masa muscular (hipertrofia) en respuesta al ejercicio con pesas mediante la unión de aminoácidos en fibras musculares nuevas.",
+                            ejemplo2: "La cicatrización de una herida cutánea, donde el cuerpo sintetiza activamente colágeno para reconstruir la estructura de la piel."
+                        },
+                        {
+                            name: "fotosíntesis en los cloroplastos de las células vegetales",
+                            type: "Anabolismo",
+                            razonamiento: "La fotosíntesis es una vía anabólica o biosintética en la cual las células vegetales capturan energía luminosa y la utilizan para unir moléculas inorgánicas simples ($CO_2$ y agua) y transformarlas en moléculas orgánicas complejas y ricas en energía (glucosa).",
+                            ejemplo1: "La producción de almidón y azúcares en las hojas de una planta de maíz expuesta a la luz solar del mediodía.",
+                            ejemplo2: "Las algas unicelulares en un estanque que crecen y se reproducen consumiendo dióxido de carbono y liberando oxígeno gaseoso."
+                        }
                     ];
                     let p = processes[Math.floor(Math.random() * processes.length)];
                     let correct = p.type;
@@ -1243,15 +1261,39 @@
                             `Fermentación celular`
                         ],
                         correcta_index: 0,
-                        explicacion: `La reacción descrita constituye ${p.desc}`
+                        explicacion: `<strong>Razonamiento:</strong> ${p.razonamiento}<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> ${p.ejemplo1}<br>• <strong>Ejemplo 2:</strong> ${p.ejemplo2}`
                     };
                 },
                 // 10. Estados de la Materia
                 () => {
                     const states = [
-                        { state: "sólido", correct: "Sus moléculas presentan una elevada fuerza de atracción mutua, manteniendo volumen y forma fijos.", wrong1: "Sus moléculas tienen fuerzas de cohesión intermedias, adaptándose al recipiente pero manteniendo un volumen definido.", wrong2: "Sus moléculas carecen de fuerzas de atracción y se expanden llenando todo el espacio disponible." },
-                        { state: "líquido", correct: "Sus moléculas tienen fuerzas de cohesión intermedias, permitiéndoles fluir y adaptarse al envase con volumen definido.", wrong1: "Sus moléculas están unidas rígidamente con fuerzas de atracción elevadas que bloquean todo flujo.", wrong2: "Sus moléculas carecen casi por completo de atracción mutua y ocupan todo el espacio libre." },
-                        { state: "gaseoso", correct: "Sus moléculas carecen casi de fuerzas de atracción mutua, expandiéndose con facilidad y llenando cualquier contenedor.", wrong1: "Sus moléculas están sólidamente entrelazadas con volumen y forma rígidos e indeformables.", wrong2: "Sus moléculas mantienen volumen constante pero se adaptan libremente a la forma del envase." }
+                        {
+                            state: "sólido",
+                            correct: "Sus moléculas presentan una elevada fuerza de atracción mutua, manteniendo volumen y forma fijos.",
+                            wrong1: "Sus moléculas tienen fuerzas de cohesión intermedias, adaptándose al recipiente pero manteniendo un volumen definido.",
+                            wrong2: "Sus moléculas carecen de fuerzas de atracción y se expanden llenando todo el espacio disponible.",
+                            razonamiento: "En el estado sólido, las fuerzas intermoleculares de atracción o cohesión son muy intensas y superan a las fuerzas de repulsión cinética. Esto obliga a las moléculas a ordenarse en posiciones de vibración fijas, confiriéndole al sólido una forma definida y un volumen constante.",
+                            ejemplo1: "Un cubo de hielo fuera del congelador conserva su forma cúbica hasta que el calor ambiental lo derrite.",
+                            ejemplo2: "Un lingote de oro mantiene su volumen y rigidez estructural sin deformarse al ser transportado."
+                        },
+                        {
+                            state: "líquido",
+                            correct: "Sus moléculas tienen fuerzas de cohesión intermedias, permitiéndoles fluir y adaptarse al envase con volumen definido.",
+                            wrong1: "Sus moléculas están unidas rígidamente con fuerzas de atracción elevadas que bloquean todo flujo.",
+                            wrong2: "Sus moléculas carecen casi por completo de atracción mutua y ocupan todo el espacio libre.",
+                            razonamiento: "En el estado líquido, las fuerzas de atracción intermoleculares y la energía de movimiento térmico están equilibradas. Las moléculas permanecen juntas pero tienen la libertad de desplazarse unas sobre otras, lo que explica que el líquido mantenga un volumen constante pero adopte la forma del contenedor que lo aloja.",
+                            ejemplo1: "El agua contenida en un vaso cilíndrico toma forma cilíndrica, pero si se vierte en un plato plano se esparce de inmediato adoptando la forma plana.",
+                            ejemplo2: "El aceite vegetal fluye libremente al verterlo en un sartén, adaptándose a su superficie debido a su cohesión intermedia."
+                        },
+                        {
+                            state: "gaseoso",
+                            correct: "Sus moléculas carecen casi de fuerzas de atracción mutua, expandiéndose con facilidad y llenando cualquier contenedor.",
+                            wrong1: "Sus moléculas están sólidamente entrelazadas con volumen y forma rígidos e indeformables.",
+                            wrong2: "Sus moléculas mantienen volumen constante pero se adaptan libremente a la forma del envase.",
+                            razonamiento: "En el estado gaseoso, la energía cinética molecular es extremadamente alta en comparación con las fuerzas de atracción intermoleculares, las cuales son prácticamente nulas. Esto causa que las moléculas se muevan a gran velocidad en todas direcciones chocando elásticamente, provocando la expansión del gas hasta llenar todo el volumen disponible.",
+                            ejemplo1: "Al inflar un globo de látex, el aire se distribuye de manera uniforme por todo su interior ejerciendo presión en las paredes.",
+                            ejemplo2: "El vapor de agua generado por una olla a presión se dispersa rápidamente por toda la cocina en pocos segundos."
+                        }
                     ];
                     let s = states[Math.floor(Math.random() * states.length)];
                     
@@ -1264,14 +1306,30 @@
                             `${s.wrong2}`
                         ],
                         correcta_index: 0,
-                        explicacion: `En el estado ${s.state}, las características estructurales moleculares determinan que ${s.correct.toLowerCase()}`
+                        explicacion: `<strong>Razonamiento:</strong> ${s.razonamiento}<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> ${s.ejemplo1}<br>• <strong>Ejemplo 2:</strong> ${s.ejemplo2}`
                     };
                 },
                 // 11. Actividad Humana e Impacto Ecológico
                 () => {
                     const impacts = [
-                        { cause: "La quema excesiva de carbón y combustibles fósiles en industrias de gran escala", effect: "Lluvia ácida debido al exceso de óxidos de azufre y nitrógeno en la atmósfera.", wrong1: "Eutrofización acelerada por acumulación excesiva de fósforo y nitrógeno en mantos de agua.", wrong2: "Agotamiento súbito del ozono en la atmósfera baja por clorofluorocarbonos." },
-                        { cause: "El arrastre y escurrimiento de fertilizantes y plaguicidas agrícolas hacia lagos y ríos", effect: "Eutrofización y proliferación desmedida de algas que asfixia la biodiversidad acuática.", wrong1: "Lluvia ácida debido a la precipitación de compuestos químicos sulfurados.", wrong2: "Destrucción térmica de la estratosfera por óxido nitroso." }
+                        {
+                            cause: "La quema excesiva de carbón y combustibles fósiles en industrias de gran escala",
+                            effect: "Lluvia ácida debido al exceso de óxidos de azufre y nitrógeno en la atmósfera.",
+                            wrong1: "Eutrofización acelerada por acumulación excesiva de fósforo y nitrógeno en mantos de agua.",
+                            wrong2: "Agotamiento súbito del ozono en la atmósfera baja por clorofluorocarbonos.",
+                            razonamiento: "La combustión de carbón y petróleo libera a la atmósfera dióxido de azufre ($SO_2$) y óxidos de nitrógeno ($NO_x$). Al reaccionar con el vapor de agua y oxígeno atmosférico, se transforman en ácido sulfúrico ($H_2SO_4$) y ácido nítrico ($HNO_3$), disolviéndose en las gotas de lluvia e incrementando su acidez (pH bajo).",
+                            ejemplo1: "El deterioro acelerado de monumentos históricos tallados en mármol o piedra caliza en grandes zonas urbanas debido a la lluvia ácida.",
+                            ejemplo2: "La acidificación de lagos forestales en zonas industriales, provocando la muerte masiva de peces por la liberación de aluminio soluble."
+                        },
+                        {
+                            cause: "El arrastre y escurrimiento de fertilizantes y plaguicidas agrícolas hacia lagos y ríos",
+                            effect: "Eutrofización y proliferación desmedida de algas que asfixia la biodiversidad acuática.",
+                            wrong1: "Lluvia ácida debido a la precipitación de compuestos químicos sulfurados.",
+                            wrong2: "Destrucción térmica de la estratosfera por óxido nitroso.",
+                            razonamiento: "Los fertilizantes agrícolas contienen altos niveles de nitrógeno y fósforo. Al lixiviarse o escurrir hacia cuerpos de agua, actúan como nutrientes limitantes superabundantes, desatando un florecimiento desmedido de algas superficiales. Estas algas bloquean la luz solar y, al morir, son descompuestas por bacterias aerobias que agotan el oxígeno disuelto en el agua, asfixiando a peces y otras formas de vida acuática.",
+                            ejemplo1: "Un lago cercano a un campo de cultivo de maíz que se torna completamente de un color verde opaco con mal olor debido a la proliferación de microalgas.",
+                            ejemplo2: "La muerte masiva de peces y crustáceos en lagunas costeras a causa de la proliferación incontrolada de fitoplancton (marea roja) alimentada por aguas residuales agrícolas."
+                        }
                     ];
                     let imp = impacts[Math.floor(Math.random() * impacts.length)];
                     
@@ -1284,15 +1342,36 @@
                             `${imp.wrong2}`
                         ],
                         correcta_index: 0,
-                        explicacion: `${imp.cause} genera como consecuencia directa la ${imp.effect.toLowerCase()}`
+                        explicacion: `<strong>Razonamiento:</strong> ${imp.razonamiento}<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> ${imp.ejemplo1}<br>• <strong>Ejemplo 2:</strong> ${imp.ejemplo2}`
                     };
                 },
                 // 12. Concepto de Velocidad y Aceleración
                 () => {
                     const cases = [
-                        { text: "Una persona camina cierta distancia a su casa en un determinado tiempo.", correct: "Velocidad", desc: "La velocidad es una magnitud que relaciona el cambio de posición (o distancia de trayectoria recorrida) con el tiempo empleado en recorrerla." },
-                        { text: "Un automóvil está en reposo y avanza con el cambio de color del semáforo.", correct: "Aceleración", desc: "Al iniciar la marcha desde el reposo, el automóvil experimenta un cambio en la velocidad a lo largo del tiempo, lo cual corresponde a la aceleración física." },
-                        { text: "Un ciclista varía el ritmo de su pedaleo al subir la pendiente de una montaña.", correct: "Aceleración", desc: "Al variar el ritmo de pedaleo en la pendiente, la velocidad del ciclista cambia (aumenta o disminuye), lo que implica una aceleración física." }
+                        {
+                            text: "Una persona camina cierta distancia a su casa en un determinado tiempo.",
+                            correct: "Velocidad",
+                            desc: "La velocidad es una magnitud que relaciona el cambio de posición (o distancia de trayectoria recorrida) con el tiempo empleado en recorrerla.",
+                            razonamiento: "La velocidad mide la rapidez con la que un cuerpo cambia de posición respecto a un marco de referencia en un intervalo de tiempo. En este caso, la persona recorre un trayecto fijo a un ritmo determinado para llegar a su destino.",
+                            ejemplo1: "Un velocista recorre 100 metros planos en un tiempo de 10 segundos, lo que da una velocidad promedio de 10 m/s.",
+                            ejemplo2: "El velocímetro de un autobús escolar marca 60 km/h en línea recta al trasladarse por una avenida principal."
+                        },
+                        {
+                            text: "Un automóvil está en reposo y avanza con el cambio de color del semáforo.",
+                            correct: "Aceleración",
+                            desc: "Al iniciar la marcha desde el reposo, el automóvil experimenta un cambio en la velocidad a lo largo del tiempo, lo cual corresponde a la aceleración física.",
+                            razonamiento: "La aceleración describe el cambio en el vector velocidad de un móvil en función del tiempo transcurrido (ya sea en su magnitud, dirección o sentido). Al arrancar desde el reposo, la velocidad del vehículo aumenta progresivamente desde 0 m/s, lo que representa una aceleración positiva.",
+                            ejemplo1: "Un auto deportivo que acelera de 0 a 100 km/h en un lapso de tan solo 3.5 segundos al incorporarse a una autopista.",
+                            ejemplo2: "Al dejar caer una pelota desde la azotea de un edificio, la fuerza de gravedad hace que su velocidad aumente 9.8 m/s cada segundo."
+                        },
+                        {
+                            text: "Un ciclista varía el ritmo de su pedaleo al subir la pendiente de una montaña.",
+                            correct: "Aceleración",
+                            desc: "Al variar el ritmo de pedaleo en la pendiente, la velocidad del ciclista cambia (aumenta o disminuye), lo que implica una aceleración física.",
+                            razonamiento: "La aceleración ocurre cuando la velocidad de un objeto cambia en cualquier sentido. Al subir una colina, el ciclista disminuye su rapidez debido a la gravedad y al esfuerzo físico, experimentando un cambio en la magnitud de su velocidad, lo que constituye una aceleración (en este caso, negativa o desaceleración).",
+                            ejemplo1: "Un autobús frena bruscamente al ver un semáforo en luz roja, reduciendo su velocidad a cero en pocos segundos.",
+                            ejemplo2: "Una montaña rusa que baja a toda velocidad y cambia drásticamente de ritmo y dirección al entrar a una curva pronunciada."
+                        }
                     ];
                     let c = cases[Math.floor(Math.random() * cases.length)];
                     let correctAns = c.correct;
@@ -1307,7 +1386,7 @@
                             `Fuerza neta`
                         ],
                         correcta_index: 0,
-                        explicacion: `La situación física describe un comportamiento donde ${c.desc.toLowerCase()}`
+                        explicacion: `<strong>Razonamiento:</strong> ${c.razonamiento}<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> ${c.ejemplo1}<br>• <strong>Ejemplo 2:</strong> ${c.ejemplo2}`
                     };
                 }
             ],
@@ -1323,7 +1402,7 @@
                             `La manada de lobos hambrientos aullando a lo lejos durante la fría noche de invierno.`
                         ],
                         correcta_index: 0,
-                        explicacion: `El sujeto es un sustantivo colectivo singular ('la manada'). Aunque esté modificado por un complemento plural ('de lobos'), el verbo principal debe concordar en singular con el núcleo del sujeto ('aulló').`
+                        explicacion: `<strong>Razonamiento:</strong> En español, los sustantivos colectivos expresados en singular (como manada, grupo, jauría, gente) exigen que el verbo principal concuerde obligatoriamente en tercera persona del singular, incluso si van seguidos de un complemento con sustantivo en plural ('de lobos').<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> El <em>grupo</em> de investigadores <em>presentó</em> el reporte científico (incorrecto: presentaron).<br>• <strong>Ejemplo 2:</strong> La <em>mayoría</em> de la población <em>apoya</em> la iniciativa de reforestación (incorrecto: apoyan).`
                     };
                 },
                 // 2. Diéresis
@@ -1337,7 +1416,7 @@
                             `Guerrero`
                         ],
                         correcta_index: 0,
-                        explicacion: `La diéresis se coloca sobre la 'u' en las sílabas 'güe' y 'güi' para indicar sonido en dicha vocal. En 'hoguera' y 'guerrero', la 'u' es muda y solo sirve para suavizar la 'g'.`
+                        explicacion: `<strong>Razonamiento:</strong> La diéresis (¨) es un signo ortográfico que se coloca obligatoriamente sobre la vocal 'u' únicamente en las combinaciones 'güe' y 'güi' para indicar que dicha vocal debe pronunciarse de forma sonora. Si no se coloca, la 'u' permanece muda (sirviendo solo para darle sonido suave a la 'g').<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> La palabra <em>pingüino</em> requiere diéresis para que la 'u' suene; si no se escribiera, se pronunciaría erróneamente 'pingino'.<br>• <strong>Ejemplo 2:</strong> En <em>manguera</em> o <em>juguete</em> la 'u' no lleva diéresis porque es muda.`
                     };
                 },
                 // 3. Palabra Esdrújula
@@ -1351,7 +1430,7 @@
                             `Azúcar`
                         ],
                         correcta_index: 0,
-                        explicacion: `La palabra 'teléfono' lleva la sílaba tónica en la antepenúltima posición (te-lé-fo-no) y, al ser esdrújula, siempre debe llevar tilde ortográfica. 'Canción' es aguda y 'azúcar' es grave.`
+                        explicacion: `<strong>Razonamiento:</strong> Las palabras esdrújulas son aquellas cuya sílaba tónica (la de mayor fuerza de voz) recae en la antepenúltima sílaba. Según las normas de acentuación del español, todas las palabras esdrújulas se acentúan gráficamente (llevan tilde) sin excepción.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> La palabra <em>médico</em> (mé-di-co) es esdrújula y lleva tilde; se diferencia del verbo <em>medico</em> (grave) y <em>medicó</em> (aguda).<br>• <strong>Ejemplo 2:</strong> La palabra <em>célula</em> (cé-lu-la) lleva tilde en la antepenúltima sílaba por regla ortográfica de esdrújulas.`
                     };
                 },
                 // 4. Grafías B/V
@@ -1365,7 +1444,7 @@
                             `tuvo - cavían`
                         ],
                         correcta_index: 0,
-                        explicacion: `'Tuvo' proviene del verbo tener (con v), mientras que 'cabían' es conjugación del verbo caber (con b).`
+                        explicacion: `<strong>Razonamiento:</strong> La conjugación en pretérito perfecto simple del verbo 'tener' se escribe siempre con 'v' ('tuvo', 'tuvieron'). Por otro lado, las terminaciones del copretérito de los verbos terminados en '-er' y '-ir' (como caber o vivir) se rigen por su raíz; en el caso de 'caber', su conjugación en copretérito o pretérito imperfecto es 'cabía' con 'b' (proveniente de la raíz de caber).<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> El tubo de metal se oxidó con la humedad (tubo es sustantivo con b). Él <em>tuvo</em> que comprar otro (tuvo es del verbo tener con v).<br>• <strong>Ejemplo 2:</strong> Los libros ya no <em>cabían</em> en el librero de madera (cabían es del verbo caber con b, derivado de su infinitivo).`
                     };
                 },
                 // 5. Impersonal Haber
@@ -1379,7 +1458,7 @@
                             `Hubieron muchos reportes de incidentes en la oficina central.`
                         ],
                         correcta_index: 0,
-                        explicacion: `Cuando el verbo 'haber' funciona como impersonal (indicando existencia), se conjuga exclusivamente en tercera persona del singular ('había', 'hubo'), sin importar que el objeto directo sea plural.`
+                        explicacion: `<strong>Razonamiento:</strong> El verbo 'haber', al usarse para expresar la presencia o existencia de personas o cosas, funciona como verbo impersonal. Esto significa que carece de sujeto y la frase que lo acompaña es su objeto directo. Por tanto, el verbo debe conjugarse invariablemente en tercera persona del singular ('hay', 'había', 'hubo', 'habrá'), siendo incorrecto pluralizarlo en 'habían' o 'hubieron'.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> <em>Había</em> muchas personas esperando la apertura de la biblioteca (es incorrecto escribir: Habían muchas personas).<br>• <strong>Ejemplo 2:</strong> Ayer <em>hubo</em> tres accidentes de tránsito en la avenida principal (es incorrecto escribir: hubieron tres accidentes).`
                     };
                 },
                 // 6. Redundancias
@@ -1393,7 +1472,7 @@
                             `El testigo declaró los pormenores del suceso subiendo para arriba ante el tribunal.`
                         ],
                         correcta_index: 0,
-                        explicacion: `Las frases 'con su propia boca' y 'subiendo para arriba' son redundantes ya que el acto de declarar implica usar la boca y subir implica moverse hacia arriba. La primera opción expresa la idea de forma clara y directa.`
+                        explicacion: `<strong>Razonamiento:</strong> La redundancia o pleonasmo consiste en añadir términos innecesarios que no aportan valor semántico nuevo a la oración debido a que su significado ya se encuentra implícito en otra palabra del enunciado. Una redacción formal académica debe eliminar estos vicios del lenguaje para garantizar precisión y brevedad.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Es correcto decir 'entrar' y es redundante decir 'entrar para adentro' o 'meter hacia adentro'.<br>• <strong>Ejemplo 2:</strong> Es correcto decir 'el paciente experimentó una hemorragia' y es redundante decir 'hemorragia de sangre' (toda hemorragia es de sangre).`
                     };
                 },
                 // 7. Registro Académico vs. Coloquial
@@ -1413,7 +1492,7 @@
                             `«${opt.formal2}»`
                         ],
                         correcta_index: 0,
-                        explicacion: `El enunciado coloquial utiliza frases informales e imprecisas (como 'un montón de ganas', 'medio raros', 'platicó', 'jala muy bien') que no se corresponden con el tono objetivo, preciso y formal de la redacción académica.`
+                        explicacion: `<strong>Razonamiento:</strong> Los textos académicos y científicos requieren un registro lingüístico formal, caracterizado por el uso de terminología técnica y precisa, objetividad gramatical (tercera persona o impersonalidad) y la total ausencia de giros lingüísticos vulgares, emotivos o coloquialismos que resten rigor conceptual.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> En vez de escribir 'los científicos se quebraron la cabeza pensando la solución', se debe redactar 'los científicos analizaron exhaustivamente las posibles soluciones'.<br>• <strong>Ejemplo 2:</strong> En vez de 'los resultados salieron chidos', se debe escribir 'los resultados obtenidos fueron sumamente satisfactorios'.`
                     };
                 },
                 // 8. Grafías Dudosas
@@ -1434,15 +1513,39 @@
                             `${c.wrong2}`
                         ],
                         correcta_index: 0,
-                        explicacion: `El enunciado correcto respeta las normas ortográficas del español. En las otras opciones hay fallas como escribir 'perseveransia' (debe ser con c), 'desición'/'decición' (debe ser decisión) o 'exploción' (debe ser explosión).`
+                        explicacion: `<strong>Razonamiento:</strong> En español, muchas palabras generan dudas por la similitud fonética entre grafías (como c/s/z o x/c). La correcta escritura de vocablos comunes como 'decisión' (con c y luego s), 'perseverancia' (con c al final) o 'explosión' (con s, derivada de explosivo) sigue reglas etimológicas y derivativas precisas.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> La palabra <em>discusión</em> se escribe con 's' porque deriva de voces que contienen la raíz 'discutir' u otras palabras de la familia léxica como <em>discusivo</em>.<br>• <strong>Ejemplo 2:</strong> La palabra <em>producción</em> se escribe con doble 'c' (cc) porque pertenece a la familia de palabras que tienen la combinación 'ct', como <em>productor</em>.`
                     };
                 },
                 // 9. Homófonos Contextuales
                 () => {
                     const pairs = [
-                        { scenario: "El ebanista utilizó una garlopa especial para __________ la superficie áspera de la viga de madera.", correct: "desbastar", wrong1: "devastar", wrong2: "debastar", desc: "'desbastar' significa eliminar las asperezas o partes bastas de un material (como la madera), mientras que 'devastar' significa asolar o destruir por completo." },
-                        { scenario: "El huracán categoría 5 amenaza con __________ por completo las plantaciones costeras de plátano.", correct: "devastar", wrong1: "desbastar", wrong2: "devastar (con b: debastar)", desc: "'devastar' denota asolamiento o destrucción total de una región, mientras que 'desbastar' se refiere a pulir o rebajar materiales." },
-                        { scenario: "El general decidió __________ a los soldados para que se negaran a acatar la orden del dictador.", correct: "rebelar", wrong1: "revelar", wrong2: "revelar (con v)", desc: "'rebelar' significa oponer resistencia o sublevarse (proveniente de rebelde), mientras que 'revelar' significa descubrir lo oculto o manifestar un secreto." }
+                        {
+                            scenario: "El ebanista utilizó una garlopa especial para __________ la superficie áspera de la viga de madera.",
+                            correct: "desbastar",
+                            wrong1: "devastar",
+                            wrong2: "debastar",
+                            razonamiento: "La palabra 'desbastar' significa quitar las partes más bastas o ásperas a una materia (como madera o piedra) antes de trabajarla. Por el contrario, 'devastar' significa destruir, asolar o reducir a ruinas un territorio.",
+                            ejemplo1: "El sculptor esculpe el bloque de mármol desbastando los bordes filosos con un cincel.",
+                            ejemplo2: "El incendio forestal amenazó con devastar miles de hectáreas de bosque de pinos."
+                        },
+                        {
+                            scenario: "El huracán categoría 5 amenaza con __________ por completo las plantaciones costeras de plátano.",
+                            correct: "devastar",
+                            wrong1: "desbastar",
+                            wrong2: "devastar (con b: debastar)",
+                            razonamiento: "La palabra 'devastar' proviene del latín devastare, que significa asolar, asolar por completo o destruir un paraje. 'Desbastar', en cambio, significa alisar o pulir materiales duros.",
+                            ejemplo1: "El terremoto de gran magnitud llegó a devastar gran parte de la infraestructura urbana de la ciudad.",
+                            ejemplo2: "Antes de pintar la mesa, debemos desbastar la madera vieja con una lija fina."
+                        },
+                        {
+                            scenario: "El general decidió __________ a los soldados para que se negaran a acatar la orden del dictador.",
+                            correct: "rebelar",
+                            wrong1: "revelar",
+                            wrong2: "revelar (con v)",
+                            razonamiento: "El verbo 'rebelar' (con b) hace referencia a la sublevación, alzamiento o desobediencia colectiva contra una autoridad. En cambio, 'revelar' (con v) significa dar a conocer un secreto, manifestar algo oculto o revelar una fotografía.",
+                            ejemplo1: "Los ciudadanos decidieron rebelarse pacíficamente contra las leyes tributarias injustas.",
+                            ejemplo2: "El informante se negó a revelar la identidad de la fuente confidencial ante el juez."
+                        }
                     ];
                     let p = pairs[Math.floor(Math.random() * pairs.length)];
                     
@@ -1455,7 +1558,7 @@
                             `${p.wrong2}`
                         ],
                         correcta_index: 0,
-                        explicacion: `De acuerdo al contexto de la oración, la opción correcta es '${p.correct}'. ${p.desc}`
+                        explicacion: `<strong>Razonamiento:</strong> ${p.razonamiento}<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> ${p.ejemplo1}<br>• <strong>Ejemplo 2:</strong> ${p.ejemplo2}`
                     };
                 },
                 // 10. Monografía e Impersonalidad
@@ -1469,7 +1572,7 @@
                             `«Las suricatas son unos animalitos adorables que viven en el desierto del Kalahari. Son muy graciosas y les encanta comer insectos. Si viste El rey león de Disney, seguro recuerdas a Timón, que es una tierna suricata.»`
                         ],
                         correcta_index: 0,
-                        explicacion: `Una monografía académica exige un tono objetivo, riguroso e impersonal. El primer texto cumple con esto al exponer datos científicos y clínicos de forma neutral, mientras que los otros incluyen juicios de valor subjetivos o lenguaje familiar.`
+                        explicacion: `<strong>Razonamiento:</strong> Las monografías académicas son textos expositivo-explicativos de carácter formal. Exigen el uso de una tercera persona gramatical o construcciones impersonales para mantener la neutralidad y objetividad científica. El uso de opiniones personales ('para mi gusto'), adjetivos afectivos ('animalitos adorables') o lenguaje de entretenimiento desvirtúa su rigor.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Redacción adecuada: 'Se analizó el impacto económico del tratado comercial' (impersonal).<br>• <strong>Ejemplo 2:</strong> Redacción inadecuada: 'En este trabajo yo les voy a platicar sobre el tratado que me pareció súper interesante' (subjetivo e informal).`
                     };
                 },
                 // 11. Antónimos Contextuales
@@ -1483,7 +1586,7 @@
                             `Irresponsabilidad`
                         ],
                         correcta_index: 0,
-                        explicacion: `En la oración, 'seriedad' se refiere a la gravedad, importancia o trascendencia del problema. Por lo tanto, el antónimo adecuado al contexto es 'insignificancia' (falta de importancia), ya que 'informalidad' o 'irresponsabilidad' no se aplican al peso o gravedad de un padecimiento.`
+                        explicacion: `<strong>Razonamiento:</strong> La oposición léxica o antonimia contextual depende de la acepción o definición exacta que el término adquiere en la oración. En el enunciado, 'seriedad' denota la gravedad, peso o peligro de una patología. Por ende, el antónimo exacto es 'insignificancia' (falta de gravedad o importancia). La 'informalidad' se opone a seriedad en el comportamiento o protocolo, lo cual no aplica aquí.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> En 'la seriedad del médico inspiraba confianza', el antónimo es 'informalidad' o 'frivolidad'.<br>• <strong>Ejemplo 2:</strong> En 'la seriedad del problema de salud alertó a los médicos', el antónimo es 'insignificancia' o 'levedad'.`
                     };
                 },
                 // 12. Diéresis en Secuencias
@@ -1497,7 +1600,7 @@
                             `u - ü - ü`
                         ],
                         correcta_index: 0,
-                        explicacion: `De acuerdo a la Ortografía de la lengua española, la diéresis (¨) se coloca sobre la 'u' para indicar su sonoridad en las sílabas 'güe' y 'güi', como en 'antigüedad' y 'vergüenza'. En la palabra 'guerra', la 'u' es muda y no lleva diéresis.`
+                        explicacion: `<strong>Razonamiento:</strong> La diéresis (¨) se aplica sobre la 'u' en las combinaciones 'güe' y 'güi' únicamente si se requiere pronunciar de forma sonora dicha vocal. En palabras como 'antigüedad' o 'vergüenza', la 'u' tiene sonido. Por el contrario, en vocablos como 'guerra', la 'u' solo funciona como un conector mudo que permite al grafema 'g' conservar un fonema velar oclusivo suave frente a la vocal 'e'.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> La palabra <em>agüita</em> lleva diéresis (¨) por ser güi con sonido; mientras que <em>guitarra</em> no la lleva porque la 'u' es muda.<br>• <strong>Ejemplo 2:</strong> <em>Cigüeña</em> lleva diéresis (¨) para que suene la 'u'; <em>ceguera</em> no la lleva ya que la 'u' no se pronuncia.`
                     };
                 }
             ],
@@ -1516,7 +1619,7 @@
                             `has lost`
                         ],
                         correcta_index: 0,
-                        explicacion: `The sentence refers to a finished action in the past ('yesterday afternoon'), which requires the simple past form of the irregular verb 'lose', which is 'lost'.`
+                        explicacion: `<strong>Reasoning (Razonamiento):</strong> Usamos el pasado simple (Past Simple) para describir acciones completadas en un momento específico del pasado (indicado aquí por 'yesterday afternoon'). El verbo 'lose' (perder) es irregular, por lo que su forma de pasado simple es 'lost', no 'losed' o 'has lost'.<br><br><strong>Examples (Ejemplos):</strong><br>• <strong>Example 1:</strong> She <em>lost</em> her keys at the office last night (Ella perdió sus llaves en la oficina anoche).<br>• <strong>Example 2:</strong> He <em>found</em> a dollar on the street yesterday (Él encontró un dólar en la calle ayer).`
                     };
                 },
                 // 2. Present Perfect (For vs Since)
@@ -1530,7 +1633,7 @@
                             `during`
                         ],
                         correcta_index: 0,
-                        explicacion: `'For' is used to define a duration of time (a period: 'three years'). 'Since' is used to define a specific starting point in time.`
+                        explicacion: `<strong>Reasoning (Razonamiento):</strong> En el presente perfecto, empleamos la preposición 'for' para hacer referencia a una duración o período de tiempo acumulado (ej. three years, five minutes). Usamos la preposición 'since' para indicar el punto de partida o momento específico en el que comenzó la acción (ej. since 2018, since Monday).<br><br><strong>Examples (Ejemplos):</strong><br>• <strong>Example 1:</strong> They have lived in London <em>for</em> ten years (Ellos han vivido en Londres por diez años).<br>• <strong>Example 2:</strong> They have lived in London <em>since</em> 2015 (Ellos han vivido en Londres desde el 2015).`
                     };
                 },
                 // 3. First Conditional
@@ -1544,7 +1647,7 @@
                             `will study / obtain`
                         ],
                         correcta_index: 0,
-                        explicacion: `The First Conditional structure consists of: If + Present Simple (study), followed by Future Simple (will obtain).`
+                        explicacion: `<strong>Reasoning (Razonamiento):</strong> El primer condicional (First Conditional) expresa situaciones futuras reales o muy probables si se cumple una condición previa. Su estructura gramatical estándar es: cláusula condicional con 'If' + Presente Simple (study) y cláusula de resultado en Futuro Simple con 'will' (will obtain).<br><br><strong>Examples (Ejemplos):</strong><br>• <strong>Example 1:</strong> If it <em>rains</em> tomorrow, we <em>will cancel</em> the picnic (Si llueve mañana, cancelaremos el picnic).<br>• <strong>Example 2:</strong> If you <em>exercise</em> daily, you <em>will feel</em> healthier (Si haces ejercicio diario, te sentirás más saludable).`
                     };
                 },
                 // 4. Modals
@@ -1558,7 +1661,7 @@
                             `could`
                         ],
                         correcta_index: 0,
-                        explicacion: `'Must' expresses a strong obligation or regulation. 'Might' and 'could' indicate possibility or permission, which are incorrect in a strict rule context.`
+                        explicacion: `<strong>Reasoning (Razonamiento):</strong> El verbo modal 'must' se emplea en inglés para indicar una obligación estricta, un deudor ineludible o una norma oficial obligatoria. Por el contrario, los modales 'might' y 'could' denotan baja probabilidad o sugerencia cortés, lo cual contradice la restricción sin excepciones indicada en la oración.<br><br><strong>Examples (Ejemplos):</strong><br>• <strong>Example 1:</strong> You <em>must</em> wear a seatbelt while driving (Debes usar obligatoriamente cinturón de seguridad al conducir).<br>• <strong>Example 2:</strong> Students <em>must</em> submit their homework before Friday (Los alumnos deben entregar su tarea antes del viernes).`
                     };
                 },
                 // 5. Comparative
@@ -1572,7 +1675,7 @@
                             `most interesting`
                         ],
                         correcta_index: 0,
-                        explicacion: `For long adjectives (three or more syllables), the comparative degree is constructed by placing 'more' before the adjective: 'more interesting'.`
+                        explicacion: `<strong>Reasoning (Razonamiento):</strong> En inglés, cuando un adjetivo posee tres o más sílabas (adjetivos largos como 'interesting' o 'beautiful'), el grado comparativo de superioridad se construye anteponiendo el adverbio 'more' antes del adjetivo y usando 'than'. Es incorrecto añadir el sufijo '-er' a estos adjetivos largos.<br><br><strong>Examples (Ejemplos):</strong><br>• <strong>Example 1:</strong> This museum is <em>more interesting</em> than the old theater (Este museum es más interesante que el viejo teatro).<br>• <strong>Example 2:</strong> Gold is <em>more expensive</em> than silver (El oro es más caro que la plata).`
                     };
                 }
             ]
@@ -1591,7 +1694,7 @@
                             `Secuestrar el aparato ribosómico hospedero de manera independiente para sintetizar proteínas accesorias.`
                         ],
                         correcta_index: 0,
-                        explicacion: `El texto señala explícitamente: «Estas espículas tienen una afinidad específica por el receptor celular humano ACE2... Al acoplarse con el receptor ACE2, la membrana del virus se fusiona con la celular, inyectando su ARN...»`
+                        explicacion: `<strong>Razonamiento:</strong> El texto científico expone con precisión que las espículas de la proteína Spike (S) tienen una afinidad electrostática por el receptor de membrana ACE2 en las células humanas. Esta unión específica actúa como una llave molecular que propicia la fusión de la envoltura viral y la entrada del material genético del virus a la célula hospedera.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> El acoplamiento del virus de la influenza con los receptores de ácido siálico en las células del tracto respiratorio para infectarlas.<br>• <strong>Ejemplo 2:</strong> Una llave específica que encaja perfectamente en una cerradura para abrir la puerta de una casa.`
                     },
                     {
                         pregunta: `A partir del texto sobre inmunología, se puede deducir que la respuesta inmunitaria citotóxica (linfocitos T CD8+) se orienta primordialmente a:`,
@@ -1601,7 +1704,7 @@
                             `Desencadenar la tormenta de citoquinas inflamatorias para proteger la función de los alvéolos pulmonares.`
                         ],
                         correcta_index: 0,
-                        explicacion: `El tercer párrafo detalla: «Simultáneamente, los linfocitos T citotóxicos (CD8+) identifican y destruyen las células corporales que han sido colonizadas por el patógeno...»`
+                        explicacion: `<strong>Razonamiento:</strong> La respuesta celular citotóxica, mediada por los linfocitos T CD8+, se especializa en reconocer antígenos virales presentados en la superficie de las células corporales que ya han sido infectadas. Su función primordial es indicar la apoptosis (muerte celular programada) de estas células infectadas para detener la replicación y propagación del virus.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> La respuesta del sistema inmunitario al eliminar las células infectadas por el virus de la varicela para detener la erupción.<br>• <strong>Ejemplo 2:</strong> Un equipo de control de calidad que desecha los empaques defectuosos en una línea de producción antes de que dañen el resto del lote.`
                     },
                     {
                         pregunta: `¿Qué sentido contextual adquiere el verbo <strong>atenuar</strong> utilizado en el desenlace del último párrafo del texto?`,
@@ -1611,7 +1714,7 @@
                             `Robustecer o incentivar la respuesta defensiva del tejido respiratorio.`
                         ],
                         correcta_index: 0,
-                        explicacion: `En el contexto clínico del texto, la tormenta de citoquinas causa un daño tisular que puede mermar o debilitar (atenuar) el correcto intercambio de gases de la función respiratoria.`
+                        explicacion: `<strong>Razonamiento:</strong> En el contexto de la lectura médica, 'atenuar' denota amortiguar, disminuir o reducir la intensidad de un síntoma, reacción o daño fisiológico. La tormenta de citoquinas genera una inflamación severa en los alvéolos que dificulta la función respiratoria, por lo que reducir o mitigar dicha inflamación es clave para proteger el intercambio de gases.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Tomar una aspirina ayuda a <em>atenuar</em> (reducir) el dolor de cabeza o bajar la fiebre de forma temporal.<br>• <strong>Ejemplo 2:</strong> Colocar paneles aislantes de ruido en una habitación para <em>atenuar</em> (amortiguar) el sonido proveniente de la calle.`
                     }
                 ];
             } else if (passage.id === 'lectura-icaro') {
@@ -1624,7 +1727,7 @@
                             `Volar pegado a la superficie del mar para aprovechar las corrientes y camuflarse del enemigo.`
                         ],
                         correcta_index: 0,
-                        explicacion: `Dédalo le aconseja explícitamente: «no debes volar demasiado bajo, pues la humedad del mar pesará en tus plumas... ni debes volar demasiado alto, porque el intenso calor del sol derretirá la cera... Mantén el rumbo intermedio».`
+                        explicacion: `<strong>Razonamiento:</strong> Dédalo le advierte a Ícaro sobre los peligros de los extremos: el vuelo bajo humedece y sobrecarga las plumas con el agua marina, mientras que el vuelo alto derrite la cera con el calor del sol. La recomendación de seguir un rumbo medio representa la virtud de la prudencia y el equilibrio en la mitología clásica.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Al inflar una llanta de bicicleta, mantener una presión media recomendada evita que ruede desinflada o explote por exceso de aire.<br>• <strong>Ejemplo 2:</strong> En la vida cotidiana, estudiar lo suficiente sin descuidar el descanso nocturno representa un equilibrio saludable.`
                     },
                     {
                         pregunta: `La caída de Ícaro al vacío en el desenlace del mito puede atribuirse a:`,
@@ -1634,7 +1737,7 @@
                             `Una ráfaga de viento repentina sobre el mar Icario que rompió el timón del ala izquierda.`
                         ],
                         correcta_index: 0,
-                        explicacion: `El texto describe que Ícaro sintió una «imprudente audacia» y, «olvidando las sabias palabras de su padre, comenzó a ascender cada vez más alto», causando que el sol derritiese la cera de unión.`
+                        explicacion: `<strong>Razonamiento:</strong> El desenlace trágico de Ícaro es causado por la transgresión de los límites y la soberbia (hibris en griego). La emoción de volar lo lleva a desatender la advertencia de su padre y subir demasiado hacia el sol, lo cual expone la cera de sus alas al calor térmico hasta derretirla, perdiendo sustentación y cayendo al mar.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Un conductor que ignora las advertencias de velocidad en una curva lluviosa y pierde el control del automóvil por imprudencia.<br>• <strong>Ejemplo 2:</strong> Subir a la copa de un árbol delgado ignorando que las ramas superiores no resisten el peso corporal.`
                     },
                     {
                         pregunta: `A partir del comportamiento lúdico de Ícaro mientras Dédalo trabajaba, se puede inferir que:`,
@@ -1644,7 +1747,7 @@
                             `Tenía grandes conocimientos en mecánica de fluidos y ayudaba a calibrar la curvatura de las plumas.`
                         ],
                         correcta_index: 0,
-                        explicacion: `El texto explica que Ícaro «jugueteaba travieso con las plumas... ignorando el peligro latente de la osada empresa», revelando su falta de conciencia sobre la gravedad del asunto.`
+                        explicacion: `<strong>Razonamiento:</strong> El juego infantil de Ícaro con las plumas y la cera mientras su padre trabaja refleja la inocencia e inconsciencia de la juventud ante los peligros mortales reales. Su atención se centra en la diversión inmediata del juego en lugar de dimensionar la trascendencia del escape planeado.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Un niño pequeño que juega a las escondidas en el consultorio médico sin entender la gravedad del diagnóstico que recibe su familia.<br>• <strong>Ejemplo 2:</strong> Jugar distraídamente con un dispositivo de seguridad industrial en una fábrica sin comprender su importancia crítica de protección.`
                     }
                 ];
             } else { // acidificacion
@@ -1657,7 +1760,7 @@
                             `La deacidificación absoluta de la acidez marina y la estabilización de pH en 8.2 unidades.`
                         ],
                         correcta_index: 0,
-                        explicacion: `El segundo párrafo detalla: «Cuando el CO2 gaseoso se disuelve... reacciona de inmediato con las moléculas de agua para formar ácido carbónico ($H_2CO_3$)... liberando iones de hidrógeno... eleva la acidez marina.»`
+                        explicacion: `<strong>Razonamiento:</strong> La reacción química se inicia con la hidratación del dióxido de carbono gaseoso ($CO_2$) disuelto en agua ($H_2O$) para formar ácido carbónico ($H_2CO_3$), un ácido débil. Este ácido se disocia de inmediato liberando iones de hidrógeno ($H^+$), los cuales disminuyen el pH del medio acuoso aumentando su acidez.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> En la elaboración de refrescos con gas carbonatado, el CO₂ disuelto forma ácido carbónico, otorgándole ese sabor ligeramente ácido característico.<br>• <strong>Ejemplo 2:</strong> Al exhalar aire con un popote dentro de un vaso con agua destilada y un indicador de pH, el agua se acidifica progresivamente por el CO₂ espirado.`
                     },
                     {
                         pregunta: `De acuerdo con el texto científico, ¿cuál es la consecuencia directa de la menor disponibilidad de iones de carbonato ($CO_3^{2-}$) libres en el agua?`,
@@ -1667,7 +1770,7 @@
                             `Se incrementa exponencialmente el crecimiento de corales debido al exceso de bicarbonato disponible.`
                         ],
                         correcta_index: 0,
-                        explicacion: `Se detalla que los iones libres de hidrógeno se asocian con el carbonato formando bicarbonato, reduciendo el carbonato disponible para sintetizar el carbonato de calcio ($CaCO_3$) de las conchas.`
+                        explicacion: `<strong>Razonamiento:</strong> El carbonato de calcio ($CaCO_3$) es el componente estructural clave usado por moluscos, corales y algas calcáreas para fabricar conchas y esqueletos. Cuando la concentración de $H^+$ libre aumenta, estos iones reaccionan con el carbonato ($CO_3^{2-}$) disponible para formar bicarbonato ($HCO_3^-$), disminuyendo el carbonato libre y dificultando o revirtiendo la calcificación celular.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> La degradación y pérdida de firmeza de las conchas de almejas y caracoles marinos expuestos a aguas de mar más ácidas.<br>• <strong>Ejemplo 2:</strong> El blanqueamiento y muerte paulatina de los arrecifes de coral debido a la fragilidad de su estructura calcárea.`
                     },
                     {
                         pregunta: `A partir del texto, se deduce que la Revolución Industrial ha impactado la química de los océanos a través de:`,
@@ -1677,7 +1780,7 @@
                             `La reducción artificial del porcentaje de agua superficial del planeta por canalizaciones industriales.`
                         ],
                         correcta_index: 0,
-                        explicacion: `El texto liga el aumento de dióxido de carbono atmosférico y la subsecuente acidificación marina a las emisiones de carbono originadas «por actividades humanas e industriales» a partir de la era industrial.`
+                        explicacion: `<strong>Razonamiento:</strong> La quema masiva de carbón, petróleo y gas natural a partir de la Revolución Industrial aumentó drásticamente la concentración de $CO_2$ en la atmósfera. Debido a que el océano absorbe aproximadamente el 30% del $CO_2$ atmosférico por difusión de gases, esto conllevó una acidificación antropogénica de las aguas a escala global sin precedentes históricos.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> El incremento térmico global acelerado debido a la acumulación de gases de efecto invernadero emitidos por las plantas generadoras de energía.<br>• <strong>Ejemplo 2:</strong> El aumento de partículas contaminantes (esmog) en grandes metrópolis industriales debido a la alta concentración de industrias químicas.`
                     }
                 ];
             }
