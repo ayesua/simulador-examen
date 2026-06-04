@@ -2550,7 +2550,42 @@
                         subtopic: "Estructura Textual",
                         pregunta: `Un autor redacta el siguiente párrafo en su ensayo: <em>«En resumen, la transición a energías limpias no es solo una opción ambiental, sino una necesidad económica insoslayable para garantizar la sustentabilidad a largo plazo.»</em> ¿Qué función cumple este fragmento dentro de la macroestructura del texto?`,
                         opciones: [
-},
+                            `Es un párrafo de conclusión que sintetiza la tesis central del ensayo mediante un marcador discursivo recapitulativo.`,
+                            `Es un párrafo de introducción que presenta por primera vez el tema de las energías limpias al lector.`,
+                            `Es un párrafo de desarrollo que aporta datos estadísticos y argumentos nuevos sobre el cambio climático.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `<strong>Razonamiento:</strong> El marcador discursivo 'En resumen' indica que el autor está recapitulando y condensando las ideas previamente expuestas en el cuerpo del ensayo. Los párrafos de conclusión no introducen información nueva, sino que sintetizan la tesis central y refuerzan el mensaje global del texto.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> 'En conclusión, los datos demuestran que la inversión en educación es clave para el desarrollo.' (Conclusión con marcador recapitulativo).<br>• <strong>Ejemplo 2:</strong> 'Por todo lo anterior, es evidente que la contaminación requiere acciones inmediatas.' (Otro ejemplo de cierre argumentativo).`
+                    };
+                },
+                // 29. Concordancia verbal compuesta
+                () => {
+                    return {
+                        subtopic: "Cohesión Gramatical",
+                        pregunta: `Selecciona el enunciado que presenta la concordancia verbal correcta entre el sujeto compuesto y el verbo:`,
+                        opciones: [
+                            `El director y los profesores acordaron posponer el examen final de matemáticas.`,
+                            `El director y los profesores acordó posponer el examen final de matemáticas.`,
+                            `El director y los profesores ha acordado posponer el examen final de matemáticas.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `<strong>Razonamiento:</strong> Cuando el sujeto es compuesto (unido por la conjunción 'y'), el verbo debe ir en plural ('acordaron'), ya que se refiere a más de un agente realizando la acción conjuntamente. Usar el verbo en singular ('acordó' o 'ha acordado') constituye un error de concordancia.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> María y Pedro <em>estudiaron</em> juntos para el examen (sujeto compuesto → verbo en plural).<br>• <strong>Ejemplo 2:</strong> El gato y el perro <em>jugaban</em> en el jardín toda la tarde.`
+                    };
+                },
+                // 30. Uso de los dos puntos
+                () => {
+                    return {
+                        subtopic: "Signos de Puntuación",
+                        pregunta: `Identifica el enunciado que emplea correctamente los <strong>dos puntos (:)</strong> según las reglas ortográficas de la RAE:`,
+                        opciones: [
+                            `El médico le dio un consejo: evitar el consumo excesivo de sal y azúcar refinada.`,
+                            `El médico le dio: un consejo evitar el consumo excesivo de sal y azúcar refinada.`,
+                            `El médico: le dio un consejo evitar el consumo excesivo de sal y azúcar refinada.`
+                        ],
+                        correcta_index: 0,
+                        explicacion: `<strong>Razonamiento:</strong> Los dos puntos se emplean para introducir una aclaración, explicación, enumeración o cita que completa el sentido de la oración precedente. En este caso, los dos puntos introducen el contenido específico del consejo médico. No deben separar el verbo de su objeto directo ni colocarse entre el sujeto y el predicado.<br><br><strong>Ejemplos prácticos:</strong><br>• <strong>Ejemplo 1:</strong> Necesitas tres cosas<em>:</em> esfuerzo, constancia y disciplina (introducción de enumeración).<br>• <strong>Ejemplo 2:</strong> Como dijo Séneca<em>:</em> «La suerte es lo que sucede cuando la preparación se encuentra con la oportunidad» (introducción de cita).`
+                    };
+                },
                 // 31. Pronombre relativo "cuyo"
                 () => {
                     return {
